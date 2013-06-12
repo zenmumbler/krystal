@@ -6,20 +6,112 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		8E0710411764EE12009467EC /* krystal_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07103F1764EE12009467EC /* krystal_test.cpp */; };
+		8E071044176504AB009467EC /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E071042176504AB009467EC /* util.cpp */; };
+		8E0710471765C8A7009467EC /* reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E0710451765C8A7009467EC /* reader.cpp */; };
+		8E07104A1765C8ED009467EC /* value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E0710481765C8ED009467EC /* value.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8E0710311764EDC9009467EC /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		8E0710331764EDC9009467EC /* krystal_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = krystal_test; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E07103F1764EE12009467EC /* krystal_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = krystal_test.cpp; path = test/krystal_test.cpp; sourceTree = "<group>"; };
+		8E071042176504AB009467EC /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = util.cpp; sourceTree = "<group>"; };
+		8E071043176504AB009467EC /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
+		8E0710451765C8A7009467EC /* reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = reader.cpp; sourceTree = "<group>"; };
+		8E0710461765C8A7009467EC /* reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = reader.h; sourceTree = "<group>"; };
+		8E0710481765C8ED009467EC /* value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = value.cpp; sourceTree = "<group>"; };
+		8E0710491765C8ED009467EC /* value.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = value.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8E0710301764EDC9009467EC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
 /* Begin PBXGroup section */
 		8E0710281764ED8C009467EC = {
 			isa = PBXGroup;
 			children = (
+				8E07103D1764EDE0009467EC /* krystal */,
+				8E07103E1764EDE7009467EC /* test */,
+				8E0710341764EDC9009467EC /* Products */,
 			);
 			sourceTree = "<group>";
 		};
+		8E0710341764EDC9009467EC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8E0710331764EDC9009467EC /* krystal_test */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8E07103D1764EDE0009467EC /* krystal */ = {
+			isa = PBXGroup;
+			children = (
+				8E071042176504AB009467EC /* util.cpp */,
+				8E071043176504AB009467EC /* util.h */,
+				8E0710451765C8A7009467EC /* reader.cpp */,
+				8E0710461765C8A7009467EC /* reader.h */,
+				8E0710481765C8ED009467EC /* value.cpp */,
+				8E0710491765C8ED009467EC /* value.h */,
+			);
+			name = krystal;
+			sourceTree = "<group>";
+		};
+		8E07103E1764EDE7009467EC /* test */ = {
+			isa = PBXGroup;
+			children = (
+				8E07103F1764EE12009467EC /* krystal_test.cpp */,
+			);
+			name = test;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8E0710321764EDC9009467EC /* krystal_test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8E07103A1764EDC9009467EC /* Build configuration list for PBXNativeTarget "krystal_test" */;
+			buildPhases = (
+				8E07102F1764EDC9009467EC /* Sources */,
+				8E0710301764EDC9009467EC /* Frameworks */,
+				8E0710311764EDC9009467EC /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = krystal_test;
+			productName = krystal_test;
+			productReference = 8E0710331764EDC9009467EC /* krystal_test */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		8E0710291764ED8C009467EC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 			};
 			buildConfigurationList = 8E07102C1764ED8C009467EC /* Build configuration list for PBXProject "Krystal" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -29,23 +121,97 @@
 				en,
 			);
 			mainGroup = 8E0710281764ED8C009467EC;
+			productRefGroup = 8E0710341764EDC9009467EC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				8E0710321764EDC9009467EC /* krystal_test */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8E07102F1764EDC9009467EC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8E0710411764EE12009467EC /* krystal_test.cpp in Sources */,
+				8E071044176504AB009467EC /* util.cpp in Sources */,
+				8E0710471765C8A7009467EC /* reader.cpp in Sources */,
+				8E07104A1765C8ED009467EC /* value.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
 		8E07102D1764ED8C009467EC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
 		};
 		8E07102E1764ED8C009467EC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+			};
+			name = Release;
+		};
+		8E07103B1764EDC9009467EC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		8E07103C1764EDC9009467EC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -57,6 +223,15 @@
 			buildConfigurations = (
 				8E07102D1764ED8C009467EC /* Debug */,
 				8E07102E1764ED8C009467EC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8E07103A1764EDC9009467EC /* Build configuration list for PBXNativeTarget "krystal_test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8E07103B1764EDC9009467EC /* Debug */,
+				8E07103C1764EDC9009467EC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
