@@ -1,5 +1,4 @@
-// krystal.h
-// part of Krystal JSON Reader
+// util.h - part of krystal
 // (c) 2013 by Arthur Langereis (@zenmumbler)
 
 #ifndef __krystal_util__
@@ -11,7 +10,9 @@
 namespace krystal {
 	
 	class document_builder : public reader_delegate {
-		std::shared_ptr<value> root_;
+		value root_;
+		std::vector<value*> context_stack_;
+		std::string next_key_;
 		
 		friend class reader;
 		
@@ -29,12 +30,15 @@ namespace krystal {
 		
 		virtual void error(const std::string&, std::istream& is) override;
 		
+		void append(value val);
+		
 	public:
-		std::shared_ptr<value> rootValue();
+		document_builder();
+		value document();
 	};
 
 	
-	std::shared_ptr<value> parse(std::istream& is);
+	value parse(std::istream& is);
 }
 
 #endif

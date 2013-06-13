@@ -10,7 +10,7 @@ namespace krystal {
 
 	class reader_delegate {
 	public:
-		virtual ~reader_delegate() {}
+		virtual ~reader_delegate() = default;
 		
 		virtual void null_value() = 0;
 		virtual void false_value() = 0;

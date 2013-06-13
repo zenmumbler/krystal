@@ -15,16 +15,16 @@ namespace krystal {
 	value::value(value_type type) : type_{type} {
 		switch(type_) {
 			case value_type::String:
-				new (&str) decltype(str){};
+				new (&str_) decltype(str_){};
 				break;
 			case value_type::Array:
-				new (&arr) decltype(arr){};
+				new (&arr_) decltype(arr_){};
 				break;
 			case value_type::Object:
-				new (&obj) decltype(obj){};
+				new (&obj_) decltype(obj_){};
 				break;
 			default:
-				num = 0.0;
+				num_ = 0.0;
 				break;
 		}
 	}
@@ -32,34 +32,48 @@ namespace krystal {
 	value::value(value&& rhs) : type_{rhs.type_ } {
 		switch(type_) {
 			case value_type::String:
-				new (&str) decltype(str){std::move(rhs.str)};
+				new (&str_) decltype(str_){std::move(rhs.str_)};
 				break;
 			case value_type::Array:
-				new (&arr) decltype(arr){std::move(rhs.arr)};
+				new (&arr_) decltype(arr_){std::move(rhs.arr_)};
 				break;
 			case value_type::Object:
-				new (&obj) decltype(obj){std::move(rhs.obj)};
+				new (&obj_) decltype(obj_){std::move(rhs.obj_)};
 				break;
 			case value_type::Number:
-				num = rhs.num;
+				num_ = rhs.num_;
 				break;
 			default:
 				break;
 		}
-		
+
+		switch(rhs.type_) {
+			case value_type::String:
+				rhs.str_.~basic_string();
+				break;
+			case value_type::Array:
+				rhs.arr_.~vector();
+				break;
+			case value_type::Object:
+				rhs.obj_.~unordered_map();
+				break;
+			default:
+				break;
+		}
+
 		rhs.type_ = value_type::Null;
 	}
 	
 	value::~value() {
 		switch(type_) {
 			case value_type::String:
-				str.~basic_string();
+				str_.~basic_string();
 				break;
 			case value_type::Array:
-				arr.~vector();
+				arr_.~vector();
 				break;
 			case value_type::Object:
-				obj.~unordered_map();
+				obj_.~unordered_map();
 				break;
 			default:
 				break;
@@ -69,14 +83,14 @@ namespace krystal {
 	value::value(const std::string& sval)
 	: type_{value_type::String}
 	{
-		new (&str) decltype(str){ sval };
+		new (&str_) decltype(str_){ sval };
 	}
 
 	size_t value::size() const {
 		if (is_object())
-			return obj.size();
+			return obj_.size();
 		if (is_array())
-			return arr.size();
+			return arr_.size();
 		return 1;
 	}
 
@@ -84,51 +98,60 @@ namespace krystal {
 		if (! is_object())
 			throw std::runtime_error("Trying to check for a key in a non-object value.");
 		
-		return obj.find(key) != obj.cend();
+		return obj_.find(key) != obj_.cend();
 	}
 	
-	void value::insert(std::string key, value val) {
+	void value::insert(std::string key, value&& val) {
 		if (! is_object())
 			throw std::runtime_error("Trying to insert a keyval into a non-object value.");
 
-		obj.emplace(key, std::move(val));
+		obj_.emplace(key, std::move(val));
 	}
 
-	void value::push_back(value val) {
+	void value::push_back(value&& val) {
 		if (! is_array())
 			throw std::runtime_error("Trying to push_back a value into a non-array value.");
 	
-		arr.push_back(std::move(val));
+		arr_.push_back(std::move(val));
 	}
 	
 	const value& value::operator[](const std::string& key) const {
 		if (! is_object())
 			throw std::runtime_error("Trying to retrieve a sub-value by key from a non-object value.");
 		
-		return obj.at(key);
+		return obj_.at(key);
+	}
+	
+	value& value::operator[](const std::string& key) {
+		return const_cast<value&>(const_cast<const value*>(this)->operator[](key));
 	}
 
 	const value& value::operator[](const size_t index) const {
 		if (! is_array())
 			throw std::runtime_error("Trying to retrieve a sub-value by index from a non-array value.");
 
-		return arr.at(index);
+		return arr_.at(index);
 	}
+	
+	value& value::operator[](const size_t index) {
+		return const_cast<value&>(const_cast<const value*>(this)->operator[](index));
+	}
+
 
 	
 	void value::debugPrint(std::ostream& os) const {
 		switch(type_) {
 			case value_type::String:
-				os << '"' << str << '"';
+				os << '"' << str_ << '"';
 				break;
 			case value_type::Number:
-				os << num;
+				os << num_;
 				break;
 			case value_type::Object:
-				os << "Object[" << obj.size() << "]";
+				os << "Object[" << obj_.size() << "]";
 				break;
 			case value_type::Array:
-				os << "Array[" << arr.size() << "]";
+				os << "Array[" << arr_.size() << "]";
 				break;
 			case value_type::True:
 				os << "true";

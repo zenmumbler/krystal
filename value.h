@@ -30,10 +30,10 @@ namespace krystal {
 	class value {
 		value_type type_;
 		union {
-			std::string str;
-			std::vector<value> arr;
-			std::unordered_map<std::string, value> obj;
-			double num;
+			std::string str_;
+			std::vector<value> arr_;
+			std::unordered_map<std::string, value> obj_;
+			double num_;
 		};
 		
 	public:
@@ -41,12 +41,14 @@ namespace krystal {
 		value(const value& rhs) = delete;
 		value(value&& rhs);
 		value& operator=(const value& rhs) = delete;
-		value& operator=(const value&& rhs) = delete;
+		value& operator=(value&& rhs) = delete;
 		~value();
 		
-		explicit value(const std::string& sval);
-		constexpr explicit value(double dval) : type_{value_type::Number}, num { dval } {}
-		constexpr explicit value(bool bval) : type_{bval ? value_type::True : value_type::False}, num { 0.0 } {}
+		value(const std::string& sval);
+		value(const char* ccval) : value(std::string{ccval}) {}
+		constexpr explicit value(int ival) : type_{value_type::Number}, num_ { (double)ival } {}
+		constexpr explicit value(double dval) : type_{value_type::Number}, num_ { dval } {}
+		constexpr explicit value(bool bval) : type_{bval ? value_type::True : value_type::False}, num_ { 0.0 } {}
 		
 		bool is_a(const value_type type) const { return type_ == type; }
 		bool is_null() const { return is_a(value_type::Null); }
@@ -57,15 +59,18 @@ namespace krystal {
 		bool is_string() const { return is_a(value_type::String); }
 		bool is_array() const { return is_a(value_type::Array); }
 		bool is_object() const { return is_a(value_type::Object); }
+		bool is_container() const { return is_object() || is_array(); }
 
 		size_t size() const;
 		bool contains(const std::string& key) const;
 
-		void insert(std::string key, value val);
-		void push_back(value val);
+		void insert(std::string key, value&& val);
+		void push_back(value&& val);
 		
 		const value& operator[](const std::string& key) const;
+		value& operator[](const std::string& key);
 		const value& operator[](const size_t index) const;
+		value& operator[](const size_t index);
 		
 		void debugPrint(std::ostream& os) const;
 	};
