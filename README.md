@@ -4,6 +4,15 @@ Krystal
 It's C++11. It reads JSON. Why not.
 In development.
 
+Example
+-------
+
+	auto file = std::ifstream("somefile.json");
+	auto doc = krystal::parse(file);
+
+	std::cout << doc["key"][3]["sub_key"] << '\n';
+
+
 Goals
 -----
 
