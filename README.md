@@ -7,6 +7,7 @@ In development.
 Goals
 -----
 
+- primarily for myself to practice with variants, parsers, etc.
 - clear and clean design and code base
 - use C++11 standard library and language features
 	- no reinventing of wheels wrt strings, maps, vectors, etc.
