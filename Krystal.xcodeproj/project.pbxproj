@@ -11,6 +11,12 @@
 		8E071044176504AB009467EC /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E071042176504AB009467EC /* util.cpp */; };
 		8E0710471765C8A7009467EC /* reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E0710451765C8A7009467EC /* reader.cpp */; };
 		8E07104A1765C8ED009467EC /* value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E0710481765C8ED009467EC /* value.cpp */; };
+		8EE2B278176B38FC0046FC5B /* checks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EE2B272176B38FC0046FC5B /* checks.cpp */; };
+		8EE2B279176B38FC0046FC5B /* helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EE2B273176B38FC0046FC5B /* helpers.cpp */; };
+		8EE2B27A176B38FC0046FC5B /* Inquisition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EE2B274176B38FC0046FC5B /* Inquisition.cpp */; };
+		8EE2B27B176B38FC0046FC5B /* Test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EE2B275176B38FC0046FC5B /* Test.cpp */; };
+		8EE2B27C176B38FC0046FC5B /* TestReport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EE2B276176B38FC0046FC5B /* TestReport.cpp */; };
+		8EE2B27D176B38FC0046FC5B /* TestRun.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EE2B277176B38FC0046FC5B /* TestRun.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +40,18 @@
 		8E0710461765C8A7009467EC /* reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = reader.h; sourceTree = "<group>"; };
 		8E0710481765C8ED009467EC /* value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = value.cpp; sourceTree = "<group>"; };
 		8E0710491765C8ED009467EC /* value.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = value.h; sourceTree = "<group>"; };
+		8EE2B272176B38FC0046FC5B /* checks.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = checks.cpp; path = ../Inquisition/checks.cpp; sourceTree = "<group>"; };
+		8EE2B273176B38FC0046FC5B /* helpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = helpers.cpp; path = ../Inquisition/helpers.cpp; sourceTree = "<group>"; };
+		8EE2B274176B38FC0046FC5B /* Inquisition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Inquisition.cpp; path = ../Inquisition/Inquisition.cpp; sourceTree = "<group>"; };
+		8EE2B275176B38FC0046FC5B /* Test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Test.cpp; path = ../Inquisition/Test.cpp; sourceTree = "<group>"; };
+		8EE2B276176B38FC0046FC5B /* TestReport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TestReport.cpp; path = ../Inquisition/TestReport.cpp; sourceTree = "<group>"; };
+		8EE2B277176B38FC0046FC5B /* TestRun.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TestRun.cpp; path = ../Inquisition/TestRun.cpp; sourceTree = "<group>"; };
+		8EE2B27E176B3B740046FC5B /* checks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = checks.h; path = ../Inquisition/checks.h; sourceTree = "<group>"; };
+		8EE2B27F176B3B740046FC5B /* helpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = helpers.h; path = ../Inquisition/helpers.h; sourceTree = "<group>"; };
+		8EE2B280176B3B740046FC5B /* Inquisition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Inquisition.h; path = ../Inquisition/Inquisition.h; sourceTree = "<group>"; };
+		8EE2B281176B3B740046FC5B /* Test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Test.h; path = ../Inquisition/Test.h; sourceTree = "<group>"; };
+		8EE2B282176B3B740046FC5B /* TestReport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TestReport.h; path = ../Inquisition/TestReport.h; sourceTree = "<group>"; };
+		8EE2B283176B3B740046FC5B /* TestRun.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TestRun.h; path = ../Inquisition/TestRun.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,9 +98,29 @@
 		8E07103E1764EDE7009467EC /* test */ = {
 			isa = PBXGroup;
 			children = (
+				8EE2B271176B38D20046FC5B /* inquisition */,
 				8E07103F1764EE12009467EC /* krystal_test.cpp */,
 			);
 			name = test;
+			sourceTree = "<group>";
+		};
+		8EE2B271176B38D20046FC5B /* inquisition */ = {
+			isa = PBXGroup;
+			children = (
+				8EE2B272176B38FC0046FC5B /* checks.cpp */,
+				8EE2B27E176B3B740046FC5B /* checks.h */,
+				8EE2B273176B38FC0046FC5B /* helpers.cpp */,
+				8EE2B27F176B3B740046FC5B /* helpers.h */,
+				8EE2B274176B38FC0046FC5B /* Inquisition.cpp */,
+				8EE2B280176B3B740046FC5B /* Inquisition.h */,
+				8EE2B275176B38FC0046FC5B /* Test.cpp */,
+				8EE2B281176B3B740046FC5B /* Test.h */,
+				8EE2B276176B38FC0046FC5B /* TestReport.cpp */,
+				8EE2B282176B3B740046FC5B /* TestReport.h */,
+				8EE2B277176B38FC0046FC5B /* TestRun.cpp */,
+				8EE2B283176B3B740046FC5B /* TestRun.h */,
+			);
+			name = inquisition;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -135,10 +173,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8EE2B278176B38FC0046FC5B /* checks.cpp in Sources */,
+				8EE2B27B176B38FC0046FC5B /* Test.cpp in Sources */,
+				8EE2B279176B38FC0046FC5B /* helpers.cpp in Sources */,
 				8E0710411764EE12009467EC /* krystal_test.cpp in Sources */,
 				8E071044176504AB009467EC /* util.cpp in Sources */,
+				8EE2B27A176B38FC0046FC5B /* Inquisition.cpp in Sources */,
+				8EE2B27C176B38FC0046FC5B /* TestReport.cpp in Sources */,
 				8E0710471765C8A7009467EC /* reader.cpp in Sources */,
 				8E07104A1765C8ED009467EC /* value.cpp in Sources */,
+				8EE2B27D176B38FC0046FC5B /* TestRun.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -187,6 +231,7 @@
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -217,6 +262,7 @@
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
