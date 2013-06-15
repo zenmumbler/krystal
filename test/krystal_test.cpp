@@ -23,18 +23,6 @@ static std::vector<value_type> all_types() {
 	};
 }
 
-static std::vector<value> one_of_each() {
-	auto types = all_types();
-	std::vector<value> values;
-	values.reserve(types.size());
-	
-	std::transform(begin(types), end(types), std::back_inserter(values), [](const value_type type) {
-		return value{type};
-	});
-	
-	return values;
-}
-
 
 int main() {
 //	auto file = std::ifstream("mydata.json");
@@ -43,17 +31,6 @@ int main() {
 //	for (int i=0; i<doc.size(); ++i)
 //		std::cout << doc[i]["title"] << '\n';
 
-//	auto doc2 = krystal::value(krystal::value_type::Array);
-//	doc2.push_back("This is a string");
-//	doc2.push_back(krystal::value(0));
-//	doc2.push_back(krystal::value(true));
-//	
-//	auto doc3 = krystal::value(krystal::value_type::Object);
-//	doc3.insert("some_key", std::move(doc2));
-//	
-//	std::cout << "doc2: " << doc2 << '\n'; // null
-//	std::cout << "doc3[some_key][0] " << doc3["some_key"][0] << '\n';
-	
 	group("value class", []{
 		group("type constructors", []{
 			test("default constructor creates null value", []{
@@ -193,39 +170,52 @@ int main() {
 		});
 		
 		group("arrays", []{
-			test("iteration", []{
+			test("normal indexed for loop should iterate over all values linearly", []{
+				auto arr = value{ value_type::Array };
+				arr.push_back(value{ std::string{"*", 10} });
+				arr.push_back(value{ std::string{"*", 20} });
+				arr.push_back(value{ std::string{"*", 30} });
+				arr.push_back(value{ std::string{"*", 40} });
+
+				for (auto ix=0L; ix<arr.size(); ++ix) {
+					const auto& val = arr[ix];
+					check_equal(std::string{"*", 10 * (ix + 1)}, val.string());
+				}
+			});
+			
+			test("range-based for should iterate over all index-value pairs linearly", []{
 				auto arr = value{ value_type::Array };
 				arr.push_back(value{ 0 });
 				arr.push_back(value{ 100 });
 				arr.push_back(value{ 200 });
 				arr.push_back(value{ 300 });
 				
-				int vals = 0;
+				int count = 0;
 				for (auto kv : arr) {
-					check_equal(vals, kv.first.number_as<int>());
-					check_equal(100 * vals, kv.second.number_as<int>());
-					++vals;
+					check_equal(count, kv.first.number_as<int>());
+					check_equal(100 * count, kv.second.number_as<int>());
+					++count;
 				}
-				check_equal(arr.size(), vals);
+				check_equal(arr.size(), count);
 			});
 		});
 
 		group("objects", []{
-			test("iteration", []{
+			test("range-based for should iterate over all key-value pairs in undefined order", []{
 				auto obj = value{ value_type::Object };
 				obj.insert("key0", value{ false });
 				obj.insert("key1", value{ true });
 				obj.insert("key2", value{ false });
 				obj.insert("key3", value{ true });
 				
-				int vals = 0;
+				int count = 0;
 				for (auto kv : obj) {
 					check_equal("key", kv.first.string().substr(0, 3));
 					auto index = std::stoi(kv.first.string().substr(3, 1));
 					check_equal((index & 1) == 1, kv.second.boolean());
-					++vals;
+					++count;
 				}
-				check_equal(obj.size(), vals);
+				check_equal(obj.size(), count);
 			});
 		});
 

@@ -240,6 +240,10 @@ namespace krystal {
 			return iterator{ obj_.end() };
 		return iterator{ arr_.end() };
 	}
+	
+	// -- non-member begin() and end()
+	iterator begin(const value& val) { return val.begin(); }
+	iterator end(const value& val) { return val.end(); }
 
 	
 	void value::debugPrint(std::ostream& os) const {

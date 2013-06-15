@@ -109,6 +109,9 @@ namespace krystal {
 	};
 
 	std::ostream& operator<<(std::ostream& os, const value& t);
+	
+	iterator begin(const value& val);
+	iterator end(const value& val);
 
 	
 	class iterator {
@@ -120,15 +123,17 @@ namespace krystal {
 		value::array_iterator arr_it;
 		value::object_iterator obj_it;
 		
-	public:
-		using iterator_category = std::forward_iterator_tag;
-		using it_value_type = std::pair<key_type, mapped_type>;
-		using reference = it_value_type;
-		
+		friend class value;
+
 		iterator(value::array_iterator a_it, int index = 0)
 		: is_object(false), arr_it(a_it), arr_index(index) {}
 		iterator(value::object_iterator o_it)
 		: is_object(true), obj_it(o_it) {}
+
+	public:
+		using iterator_category = std::forward_iterator_tag;
+		using it_value_type = std::pair<key_type, mapped_type>;
+		using reference = it_value_type;
 		
 		it_value_type current() const {
 			if (is_object)
