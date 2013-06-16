@@ -10,7 +10,7 @@
 #include <stdexcept>
 #include <utility>
 #include <iterator>
-#include "value.h"
+#include "value.hpp"
 
 namespace krystal {
 	
@@ -29,9 +29,6 @@ namespace krystal {
 	}
 
 	
-	// container iteration
-
-
 
 	value::value(value_type type)
 	: type_{type}

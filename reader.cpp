@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <sstream>
-#include "reader.h"
+#include "reader.hpp"
 
 namespace krystal {
 	void reader::skip_white(std::istream& is) {

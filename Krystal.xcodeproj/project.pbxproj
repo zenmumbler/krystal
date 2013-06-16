@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8E0710411764EE12009467EC /* krystal_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07103F1764EE12009467EC /* krystal_test.cpp */; };
-		8E071044176504AB009467EC /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E071042176504AB009467EC /* util.cpp */; };
+		8E071044176504AB009467EC /* document.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E071042176504AB009467EC /* document.cpp */; };
 		8E0710471765C8A7009467EC /* reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E0710451765C8A7009467EC /* reader.cpp */; };
 		8E07104A1765C8ED009467EC /* value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E0710481765C8ED009467EC /* value.cpp */; };
 		8EE2B278176B38FC0046FC5B /* checks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EE2B272176B38FC0046FC5B /* checks.cpp */; };
@@ -34,12 +34,12 @@
 /* Begin PBXFileReference section */
 		8E0710331764EDC9009467EC /* krystal_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = krystal_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E07103F1764EE12009467EC /* krystal_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = krystal_test.cpp; path = test/krystal_test.cpp; sourceTree = "<group>"; };
-		8E071042176504AB009467EC /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = util.cpp; sourceTree = "<group>"; };
-		8E071043176504AB009467EC /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
+		8E071042176504AB009467EC /* document.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = document.cpp; sourceTree = "<group>"; };
+		8E071043176504AB009467EC /* document.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = document.hpp; sourceTree = "<group>"; };
 		8E0710451765C8A7009467EC /* reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = reader.cpp; sourceTree = "<group>"; };
-		8E0710461765C8A7009467EC /* reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = reader.h; sourceTree = "<group>"; };
+		8E0710461765C8A7009467EC /* reader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = reader.hpp; sourceTree = "<group>"; };
 		8E0710481765C8ED009467EC /* value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = value.cpp; sourceTree = "<group>"; };
-		8E0710491765C8ED009467EC /* value.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = value.h; sourceTree = "<group>"; };
+		8E0710491765C8ED009467EC /* value.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = value.hpp; sourceTree = "<group>"; };
 		8EE2B272176B38FC0046FC5B /* checks.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = checks.cpp; path = ../Inquisition/checks.cpp; sourceTree = "<group>"; };
 		8EE2B273176B38FC0046FC5B /* helpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = helpers.cpp; path = ../Inquisition/helpers.cpp; sourceTree = "<group>"; };
 		8EE2B274176B38FC0046FC5B /* Inquisition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Inquisition.cpp; path = ../Inquisition/Inquisition.cpp; sourceTree = "<group>"; };
@@ -52,6 +52,9 @@
 		8EE2B281176B3B740046FC5B /* Test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Test.h; path = ../Inquisition/Test.h; sourceTree = "<group>"; };
 		8EE2B282176B3B740046FC5B /* TestReport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TestReport.h; path = ../Inquisition/TestReport.h; sourceTree = "<group>"; };
 		8EE2B283176B3B740046FC5B /* TestRun.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TestRun.h; path = ../Inquisition/TestRun.h; sourceTree = "<group>"; };
+		8EF50D71176E286E000086DF /* test_value.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = test_value.hpp; path = test/test_value.hpp; sourceTree = "<group>"; };
+		8EF50D72176E2A64000086DF /* test_reader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = test_reader.hpp; path = test/test_reader.hpp; sourceTree = "<group>"; };
+		8EF50D73176E2D5A000086DF /* krystal.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = krystal.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,12 +88,13 @@
 		8E07103D1764EDE0009467EC /* krystal */ = {
 			isa = PBXGroup;
 			children = (
-				8E071042176504AB009467EC /* util.cpp */,
-				8E071043176504AB009467EC /* util.h */,
+				8E071042176504AB009467EC /* document.cpp */,
+				8E071043176504AB009467EC /* document.hpp */,
 				8E0710451765C8A7009467EC /* reader.cpp */,
-				8E0710461765C8A7009467EC /* reader.h */,
+				8E0710461765C8A7009467EC /* reader.hpp */,
 				8E0710481765C8ED009467EC /* value.cpp */,
-				8E0710491765C8ED009467EC /* value.h */,
+				8E0710491765C8ED009467EC /* value.hpp */,
+				8EF50D73176E2D5A000086DF /* krystal.hpp */,
 			);
 			name = krystal;
 			sourceTree = "<group>";
@@ -100,6 +104,8 @@
 			children = (
 				8EE2B271176B38D20046FC5B /* inquisition */,
 				8E07103F1764EE12009467EC /* krystal_test.cpp */,
+				8EF50D72176E2A64000086DF /* test_reader.hpp */,
+				8EF50D71176E286E000086DF /* test_value.hpp */,
 			);
 			name = test;
 			sourceTree = "<group>";
@@ -177,7 +183,7 @@
 				8EE2B27B176B38FC0046FC5B /* Test.cpp in Sources */,
 				8EE2B279176B38FC0046FC5B /* helpers.cpp in Sources */,
 				8E0710411764EE12009467EC /* krystal_test.cpp in Sources */,
-				8E071044176504AB009467EC /* util.cpp in Sources */,
+				8E071044176504AB009467EC /* document.cpp in Sources */,
 				8EE2B27A176B38FC0046FC5B /* Inquisition.cpp in Sources */,
 				8EE2B27C176B38FC0046FC5B /* TestReport.cpp in Sources */,
 				8E0710471765C8A7009467EC /* reader.cpp in Sources */,

@@ -2,7 +2,7 @@
 // (c) 2013 by Arthur Langereis (@zenmumbler)
 
 #include <iostream>
-#include "util.h"
+#include "document.hpp"
 
 namespace krystal {
 	

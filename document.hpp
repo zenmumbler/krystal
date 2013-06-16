@@ -1,11 +1,11 @@
 // util.h - part of krystal
 // (c) 2013 by Arthur Langereis (@zenmumbler)
 
-#ifndef __krystal_util__
-#define __krystal_util__
+#ifndef __krystal_document__
+#define __krystal_document__
 
-#include "reader.h"
-#include "value.h"
+#include "reader.hpp"
+#include "value.hpp"
 
 namespace krystal {
 	
