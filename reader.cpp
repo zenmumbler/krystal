@@ -29,16 +29,65 @@ namespace krystal {
 
 	
 	void reader::parse_number(std::istream& is) {
+		std::stringstream token;
+		decltype(is.peek()) ch;
+		
+		auto munch = [&]{ token << (char)is.get(); ch = is.peek(); };
+		
+		ch = is.peek();
+		if (ch == '-')
+			munch();
+		
+		ch = is.peek();
+		if (ch == '0')
+			munch();
+		else {
+			if (ch < '0' || ch > '9') {
+				error("The integer part of a number must have at least 1 digit", is);
+				return;
+			}
+			do {
+				munch();
+			} while (ch >= '0' && ch <= '9');
+		}
+		
+		if (ch == '.') {
+			munch();
+			
+			if (ch < '0' || ch > '9') {
+				error("The fraction part of a number must have at least 1 digit", is);
+				return;
+			}
+			do {
+				munch();
+			} while (ch >= '0' && ch <= '9');
+		}
+		
+		if (ch == 'e' || ch == 'E') {
+			munch();
+			if (ch == '+' || ch == '-')
+				munch();
+			if (ch < '0' || ch > '9') {
+				error("The exponent part of a number must have at least 1 digit", is);
+				return;
+			}
+			do {
+				munch();
+			} while (ch >= '0' && ch <= '9');
+		}
+		
 		double val;
-		is >> val;
+		token >> val;
+
 		delegate_->number_value(val);
 	}
 
 	
 	void reader::parse_string(std::istream& is) {
+		std::ostringstream ss;
+
 		is.get(); // opening "
 		
-		std::ostringstream ss;
 		while (is) {
 			auto ch = is.get();
 			if (ch == '"')
@@ -178,10 +227,12 @@ namespace krystal {
 				break;
 		}
 		
-		skip_white(is);
-		auto ch = is.get();
-		if (is)
-			error("Unexpected data found after end of document: `" + std::string{static_cast<char>(ch)} + "`.", is);
+		if (! error_occurred) {
+			skip_white(is);
+			auto ch = is.get();
+			if (is)
+				error("Unexpected data found after end of document: `" + std::string{static_cast<char>(ch)} + "`.", is);
+		}
 		
 		return !error_occurred;
 	}

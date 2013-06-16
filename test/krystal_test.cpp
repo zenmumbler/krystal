@@ -1,5 +1,5 @@
-//  krystal_test.cpp - part of krystal
-//  (c) 2013 by Arthur Langereis (@zenmumbler)
+// krystal_test.cpp - part of krystal
+// (c) 2013 by Arthur Langereis (@zenmumbler)
 
 #include <vector>
 #include <string>
@@ -8,7 +8,6 @@
 #include <algorithm>
 
 #include "krystal.hpp"
-
 #include "Inquisition/Inquisition.h"
 
 using namespace Inquisition;
@@ -24,10 +23,12 @@ static std::vector<value_type> all_types() {
 
 #include "test_value.hpp"
 #include "test_reader.hpp"
+#include "test_jsonchecker.hpp"
 
 int main() {
 	test_value();
 	test_reader();
+	test_jsonchecker();
 	
 	auto r = makeReport<SimpleTestReport>(std::ref(std::cout));
 	runAll(r);

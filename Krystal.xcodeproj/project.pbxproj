@@ -55,6 +55,7 @@
 		8EF50D71176E286E000086DF /* test_value.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = test_value.hpp; path = test/test_value.hpp; sourceTree = "<group>"; };
 		8EF50D72176E2A64000086DF /* test_reader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = test_reader.hpp; path = test/test_reader.hpp; sourceTree = "<group>"; };
 		8EF50D73176E2D5A000086DF /* krystal.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = krystal.hpp; sourceTree = "<group>"; };
+		8EF50D74176E5651000086DF /* test_jsonchecker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = test_jsonchecker.hpp; path = test/test_jsonchecker.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +107,7 @@
 				8E07103F1764EE12009467EC /* krystal_test.cpp */,
 				8EF50D72176E2A64000086DF /* test_reader.hpp */,
 				8EF50D71176E286E000086DF /* test_value.hpp */,
+				8EF50D74176E5651000086DF /* test_jsonchecker.hpp */,
 			);
 			name = test;
 			sourceTree = "<group>";

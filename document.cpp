@@ -2,6 +2,7 @@
 // (c) 2013 by Arthur Langereis (@zenmumbler)
 
 #include <iostream>
+#include <sstream>
 #include "document.hpp"
 
 namespace krystal {
@@ -23,7 +24,7 @@ namespace krystal {
 		if (cur_node->is_object()) {
 			cur_node->insert(next_key_, std::move(val));
 			if (val_is_container) {
-				auto mv = const_cast<value*>(&(*cur_node)[next_key_]);
+				auto mv = &(*cur_node)[next_key_];
 				context_stack_.push_back(mv);
 			}
 			next_key_.clear();
@@ -31,34 +32,29 @@ namespace krystal {
 		else { // array
 			cur_node->push_back(std::move(val));
 			if (val_is_container) {
-				auto mv = const_cast<value*>(&(*cur_node)[cur_node->size()-1]);
+				auto mv = &(*cur_node)[cur_node->size()-1];
 				context_stack_.push_back(mv);
 			}
 		}
 	}
 	
 	void document_builder::null_value() {
-		std::cout << "null "<< '\n';
 		append({ value_type::Null });
 	}
 
 	void document_builder::false_value() {
-		std::cout << "false "<< '\n';
 		append({ value_type::False });
 	}
 
 	void document_builder::true_value() {
-		std::cout << "true "<< '\n';
 		append({ value_type::True });
 	}
 
 	void document_builder::number_value(double num) {
-		std::cout << "N: " << num << '\n';
 		append(value{ num });
 	}
 
 	void document_builder::string_value(const std::string& str) {
-		std::cout << "S: " << str << '\n';
 		if (next_key_.size())
 			append(str);
 		else
@@ -66,22 +62,18 @@ namespace krystal {
 	}
 	
 	void document_builder::array_begin() {
-		std::cout << "[\n";
 		append({ value_type::Array });
 	}
 
 	void document_builder::array_end() {
-		std::cout << "]\n";
 		context_stack_.pop_back();
 	}
 	
 	void document_builder::object_begin() {
-		std::cout << "{\n";
 		append({ value_type::Object });
 	}
 
 	void document_builder::object_end() {
-		std::cout << "}\n";
 		context_stack_.pop_back();
 	}
 	
@@ -95,12 +87,17 @@ namespace krystal {
 	}
 	
 	
-	value parse(std::istream& is) {
+	value parse(std::istream& json_stream) {
 		auto delegate = std::make_shared<document_builder>();
 		reader r { delegate };
-		if (! r.parseDocument(is))
+		if (! r.parseDocument(json_stream))
 			return { value_type::Null };
 		
 		return delegate->document();
+	}
+	
+	value parse(std::string json_string) {
+		std::istringstream iss { json_string };
+		return parse(iss);
 	}
 }

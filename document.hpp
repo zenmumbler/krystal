@@ -4,8 +4,8 @@
 #ifndef __krystal_document__
 #define __krystal_document__
 
-#include "reader.hpp"
 #include "value.hpp"
+#include "reader.hpp"
 
 namespace krystal {
 	
@@ -38,7 +38,8 @@ namespace krystal {
 	};
 
 	
-	value parse(std::istream& is);
+	value parse(std::istream& json_stream);
+	value parse(std::string json_string);
 }
 
 #endif
