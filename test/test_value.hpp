@@ -6,12 +6,12 @@ void test_value() {
 		group("type constructors", []{
 			test("default constructor creates null value", []{
 				value v;
-				check_equal(value_type::Null, v.type());
+				check_equal(v.type(), value_type::Null);
 			});
 			
 			test("value_type constructor creates value of that type", []{
 				for (auto type : all_types())
-					check_equal(type, (value{ type }).type());
+					check_equal((value{ type }).type(), type);
 			});
 		});
 		
@@ -23,8 +23,8 @@ void test_value() {
 				auto cc_val = value{ cc_str };
 				auto std_val = value{ std_str };
 				
-				check_equal(cc_str, cc_val.string());
-				check_equal(std_str, std_val.string());
+				check_equal(cc_val.string(), cc_str);
+				check_equal(std_val.string(), std_str);
 			});
 			
 			test("numbers create number values", []{
@@ -34,8 +34,8 @@ void test_value() {
 				auto int_val = value{int_num};
 				auto dbl_val = value{dbl_num};
 				
-				check_equal(int_num, int_val.number_as<decltype(int_num)>());
-				check_equal(dbl_num, dbl_val.number());
+				check_equal(int_val.number_as<decltype(int_num)>(), int_num);
+				check_equal(dbl_val.number(), dbl_num);
 			});
 			
 			test("bools create bool values", []{
@@ -45,8 +45,8 @@ void test_value() {
 				auto b1_val = value{b1};
 				auto b2_val = value{b2};
 				
-				check_equal(b1, b1_val.boolean());
-				check_equal(b2, b2_val.boolean());
+				check_equal(b1_val.boolean(), b1);
+				check_equal(b2_val.boolean(), b2);
 			});
 		});
 		
@@ -56,8 +56,8 @@ void test_value() {
 					auto source = value{type};
 					auto dest = std::move(source);
 					
-					check_equal(value_type::Null, source.type());
-					check_equal(type, dest.type());
+					check_equal(source.type(), value_type::Null);
+					check_equal(dest.type(), type);
 				});
 				
 				test("move-assigning a " + to_string(type) + " moves type", [type]{
@@ -65,8 +65,8 @@ void test_value() {
 					auto dest = value{};
 					dest = std::move(source);
 					
-					check_equal(value_type::Null, source.type());
-					check_equal(type, dest.type());
+					check_equal(source.type(), value_type::Null);
+					check_equal(dest.type(), type);
 				});
 			}
 			
@@ -86,22 +86,22 @@ void test_value() {
 				ov.insert("monkeys", value{ 12 });
 				
 				dest = std::move(iv);
-				check_equal(100, dest.number());
+				check_equal(dest.number(), 100);
 				dest = std::move(dv);
-				check_equal(48390.32789, dest.number());
+				check_equal(dest.number(), 48390.32789);
 				dest = std::move(sv);
-				check_equal("some string", dest.string());
+				check_equal(dest.string(), "some string");
 				
 				dest = std::move(av);
-				check_equal(3, dest.size());
-				check_equal(50, dest[0].number());
-				check_equal(true, dest[1].boolean());
-				check_equal("charm", dest[2].string());
+				check_equal(dest.size(), 3);
+				check_equal(dest[0].number(), 50);
+				check_equal(dest[1].boolean(), true);
+				check_equal(dest[2].string(), "charm");
 				
 				dest = std::move(ov);
-				check_equal(2, dest.size());
-				check_equal("don't forget", dest["important"].string());
-				check_equal(12, dest["monkeys"].number_as<int>());
+				check_equal(dest.size(), 2);
+				check_equal(dest["important"].string(), "don't forget");
+				check_equal(dest["monkeys"].number_as<int>(), 12);
 			});
 		});
 		
@@ -150,7 +150,7 @@ void test_value() {
 				
 				for (auto ix=0L; ix<arr.size(); ++ix) {
 					const auto& val = arr[ix];
-					check_equal(std::string{"*", 10 * (ix + 1)}, val.string());
+					check_equal(val.string(), std::string{"*", 10 * (ix + 1)});
 				}
 			});
 			
@@ -163,11 +163,11 @@ void test_value() {
 				
 				int count = 0;
 				for (auto kv : arr) {
-					check_equal(count, kv.first.number_as<int>());
-					check_equal(100 * count, kv.second.number_as<int>());
+					check_equal(kv.first.number_as<int>(), count);
+					check_equal(kv.second.number_as<int>(), 100 * count);
 					++count;
 				}
-				check_equal(arr.size(), count);
+				check_equal(count, arr.size());
 			});
 		});
 		
@@ -181,9 +181,9 @@ void test_value() {
 				
 				int count = 0;
 				for (auto kv : obj) {
-					check_equal("key", kv.first.string().substr(0, 3));
+					check_equal(kv.first.string().substr(0, 3), "key");
 					auto index = std::stoi(kv.first.string().substr(3, 1));
-					check_equal((index & 1) == 1, kv.second.boolean());
+					check_equal(kv.second.boolean(), (index & 1) == 1);
 					++count;
 				}
 				check_equal(obj.size(), count);

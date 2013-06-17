@@ -4,7 +4,7 @@
 void test_jsonchecker() {
 	group("jsonchecker tests", []{
 
-		test("faulty test data", []{
+		test("faulty test data should not parse", []{
 			const int faulty_tests = 33;
 			
 			for (int tix=1; tix <= faulty_tests; ++tix) {
@@ -17,13 +17,22 @@ void test_jsonchecker() {
 			}
 		});
 
-		test("valid test data", []{
+		test("valid test data should yield no errors", []{
 			const int valid_tests = 3;
 			
 			for (int tix=1; tix <= valid_tests; ++tix) {
 				std::ifstream pass_file{ "jsonchecker/pass" + to_string(tix) + ".json" };
 				auto val = krystal::parse(pass_file);
 				check_true(val.is_container());
+			}
+		});
+		
+		test("pass1.json document parse should yield exact document equivalent", []{
+			std::ifstream pass_file{ "jsonchecker/pass1.json" };
+			auto doc = krystal::parse(pass_file);
+			
+			if (check_true(doc.is_array()) && check_equal(doc.size(), 20)) {
+				
 			}
 		});
 

@@ -55,7 +55,7 @@ namespace krystal {
 	}
 
 	void document_builder::string_value(const std::string& str) {
-		if (next_key_.size())
+		if (context_stack_.back()->is_array() || next_key_.size())
 			append(str);
 		else
 			next_key_ = str;
