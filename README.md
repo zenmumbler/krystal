@@ -40,7 +40,8 @@ Use subscripting for array and object values.
 
 	auto doc = krystal::parse(...);
 
-	auto delay = doc["levels"][0]["zombie spawn delay"];
+	auto delay = doc["levels"][0]["zombie spawn delay"].number();
+	auto name = doc["levels"][0]["level name"].string();
 
 Iterate over arrays or objects with normal range for syntax. Each loop yields a pair of `krystal::value`s.
 For arrays, `first` is a number value with the index, for objects, `first` is the key string value.
