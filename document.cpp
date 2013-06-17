@@ -78,7 +78,7 @@ namespace krystal {
 	}
 	
 	void document_builder::error(const std::string& msg, std::istream& is) {
-		std::cout << "ERROR! " << msg << '\n';
+		std::cout << "ERROR at position " << is.tellg() << ": " << msg << '\n';
 	}
 	
 	value document_builder::document() {

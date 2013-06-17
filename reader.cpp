@@ -15,16 +15,24 @@ namespace krystal {
 	void reader::parse_literal(std::istream& is) {
 		static std::string null_tok {"null"}, true_tok{"true"}, false_tok{"false"};
 
-		std::string token;
-		is >> token;
-		if (token == true_tok)
+		std::ostringstream token;
+		auto ch = is.peek();
+		
+		while (ch >= 'a' && ch <= 'z') {
+			token << (char)is.get();
+			ch = is.peek();
+		}
+		
+		auto token_str = token.str();
+		
+		if (token_str == true_tok)
 			delegate_->true_value();
-		else if (token == false_tok)
+		else if (token_str == false_tok)
 			delegate_->false_value();
-		else if (token == null_tok)
+		else if (token_str == null_tok)
 			delegate_->null_value();
 		else
-			error("Expected value but found `" + token + "`.", is);
+			error("Expected value but found `" + token_str + "`.", is);
 	}
 
 	
@@ -85,15 +93,91 @@ namespace krystal {
 	
 	void reader::parse_string(std::istream& is) {
 		std::ostringstream ss;
-
-		is.get(); // opening "
 		
+		auto unicode_hex_number = [&]{
+			int digits = 4, number = 0;
+
+			while (digits-- > 0 && is) {
+				auto ch = is.get();
+				number <<= 4;
+
+				if (ch >= '0' && ch <= '9')
+					number += static_cast<int>(ch - '0');
+				else if (ch >= 'a' && ch <= 'f')
+					number += 10 + static_cast<int>(ch - 'a');
+				else if (ch >= 'A' && ch <= 'F')
+					number += 10 + static_cast<int>(ch - 'A');
+				else {
+					error("Invalid hexadecimal character in unicode hex literal: `" + std::string{static_cast<char>(ch)} + '`', is);
+					return 0;
+				}
+			}
+			
+			return number;
+		};
+		
+		auto unicode_literal = [&]{
+			auto codepoint = unicode_hex_number();
+			if (error_occurred) return 0;
+
+			if (codepoint >= 0xD800 && codepoint <= 0xDBFF) {
+				if (is.get() != '\\' || is.get() != 'u') {
+					error("Expected second half of unicode surrogate pair.", is);
+					return 0;
+				}
+
+				auto pairpoint = unicode_hex_number();
+				if (error_occurred) return 0;
+
+				if (pairpoint < 0xDC00 || pairpoint > 0xDFFF) {
+					error("Second half of unicode surrogate pair is invalid.", is);
+					return 0;
+				}
+				codepoint = (((codepoint - 0xD800) << 10) | (pairpoint - 0xDC00)) + 0x10000;
+			}
+
+			return codepoint;
+		};
+
+		
+		// opening "
+		if (is.get() != '"') {
+			error("Expected opening quote for string.", is);
+			return;
+		}
+			
 		while (is) {
 			auto ch = is.get();
 			if (ch == '"')
 				break;
-			else
-				ss.put(ch);
+			else if (ch == '\\') {
+				ch = is.get();
+				switch (ch) {
+					case '"': case '\\': case '/': ss.put(ch); break;
+					case 'n': ss.put('\n'); break;
+					case 'r': ss.put('\r'); break;
+					case 't': ss.put('\t'); break;
+					case 'b': ss.put('\b'); break;
+					case 'f': ss.put('\f'); break;
+					case 'u':
+						unicode_literal(); // ignore result
+						if (error_occurred) return;
+						ss.put('?'); // encoding unknown for now
+						break;
+						
+					default:
+						error("Invalid escape sequence character: `" + std::string{static_cast<char>(ch)} + '`', is);
+						return;
+				}
+			}
+			else {
+				if (ch >= 0x20)
+					ss.put(ch);
+				else {
+					error("Encountered an unescaped control character #" + std::to_string(ch), is);
+					return;
+				}
+			}
 		}
 		
 		if (! is) {
@@ -148,6 +232,9 @@ namespace krystal {
 		while (!error_occurred && is && ch != '}') {
 			parse_string(is); // key
 			skip_white(is);
+			if (error_occurred)
+				return;
+
 			if (is.get() != ':') {
 				error("Expected `:` but found `" + std::string{static_cast<char>(ch)} + "`.", is);
 				return;

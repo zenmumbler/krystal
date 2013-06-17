@@ -8,6 +8,9 @@ void test_jsonchecker() {
 			const int faulty_tests = 33;
 			
 			for (int tix=1; tix <= faulty_tests; ++tix) {
+				if (tix == 18) // test 18 tests for limited nesting, which does not apply to krystal
+					continue;
+				
 				std::ifstream fail_file{ "jsonchecker/fail" + to_string(tix) + ".json" };
 				auto val = krystal::parse(fail_file);
 				check_equal(val.type(), value_type::Null);
