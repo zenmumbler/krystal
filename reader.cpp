@@ -122,7 +122,7 @@ namespace krystal {
 
 			if (codepoint >= 0xD800 && codepoint <= 0xDBFF) {
 				if (is.get() != '\\' || is.get() != 'u') {
-					error("Expected second half of unicode surrogate pair.", is);
+					error("Expected second half of UTF-16 surrogate pair.", is);
 					return 0;
 				}
 
@@ -130,7 +130,7 @@ namespace krystal {
 				if (error_occurred) return 0;
 
 				if (pairpoint < 0xDC00 || pairpoint > 0xDFFF) {
-					error("Second half of unicode surrogate pair is invalid.", is);
+					error("Second half of UTF-16 surrogate pair is invalid.", is);
 					return 0;
 				}
 				codepoint = (((codepoint - 0xD800) << 10) | (pairpoint - 0xDC00)) + 0x10000;
@@ -139,6 +139,25 @@ namespace krystal {
 			return codepoint;
 		};
 
+		auto write_codepoint_as_utf8 = [](std::ostream& os, int codepoint) {
+			if (codepoint <= 0x7F)
+				os.put(codepoint & 0x7F);
+			else if (codepoint <= 0x7FF) {
+				os.put(0xC0 | ((codepoint >> 6) & 0xFF));
+				os.put(0x80 | (codepoint & 0x3F));
+			}
+			else if (codepoint <= 0xFFFF) {
+				os.put(0xE0 | ((codepoint >> 12) & 0xFF));
+				os.put(0x80 | ((codepoint >> 6) & 0x3F));
+				os.put(0x80 | (codepoint & 0x3F));
+			}
+			else {
+				os.put(0xF0 | ((codepoint >> 18) & 0xFF));
+				os.put(0x80 | ((codepoint >> 12) & 0x3F));
+				os.put(0x80 | ((codepoint >> 6) & 0x3F));
+				os.put(0x80 | (codepoint & 0x3F));
+			}
+		};
 		
 		// opening "
 		if (is.get() != '"') {
@@ -160,9 +179,8 @@ namespace krystal {
 					case 'b': ss.put('\b'); break;
 					case 'f': ss.put('\f'); break;
 					case 'u':
-						unicode_literal(); // ignore result
+						write_codepoint_as_utf8(ss, unicode_literal());
 						if (error_occurred) return;
-						ss.put('?'); // encoding unknown for now
 						break;
 						
 					default:
