@@ -90,7 +90,7 @@ namespace krystal {
 	value parse(std::istream& json_stream) {
 		auto delegate = std::make_shared<document_builder>();
 		reader r { delegate };
-		if (! r.parseDocument(json_stream))
+		if (! r.parse_document(json_stream))
 			return { value_type::Null };
 		
 		return delegate->document();

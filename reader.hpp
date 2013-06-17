@@ -45,7 +45,7 @@ namespace krystal {
 	public:
 		reader(std::shared_ptr<reader_delegate> delegate) : delegate_{ delegate } {}
 		
-		bool parseDocument(std::istream& is);
+		bool parse_document(std::istream& is);
 	};
 	
 }

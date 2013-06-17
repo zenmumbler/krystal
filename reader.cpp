@@ -320,7 +320,7 @@ namespace krystal {
 	}
 
 	
-	bool reader::parseDocument(std::istream& is) {
+	bool reader::parse_document(std::istream& is) {
 		skip_white(is);
 		
 		switch (is.peek()) {
