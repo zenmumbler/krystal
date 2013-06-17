@@ -152,5 +152,11 @@ void test_jsonchecker() {
 			}
 		});
 
+		test("pass2.json enormous subscript access should work", []{
+			std::ifstream pass_file{ "jsonchecker/pass2.json" };
+			auto doc = krystal::parse(pass_file);
+
+			check_equal(doc[0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0].string(), "Not too deep");
+		});
 	});
 }
