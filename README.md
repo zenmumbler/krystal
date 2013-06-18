@@ -18,7 +18,7 @@ Design
 	- simple API with clear rules
 	- integrated with language constructs (e.g. range for loop)
 	- clear error messages in parser for syntax errors and in exceptions when using values
-	- speed and memory usage good, limited by your std lib
+	- speed and memory usage limited by your std lib, but second only to rapidjson right now using clang & libc++
 - fully conformant to JSON spec
 	- correctly parses entire jsonchecker test suite
 - UTF-8 only files and strings for now
@@ -30,15 +30,13 @@ Examples
 
 Default parse call generates document in a single call.
 
-	auto file = std::ifstream{"somefile.json"};
-	auto doc = krystal::parse(file);
+	auto file = std::ifstream{"game_data.json"};
+	auto doc = krystal::parse_stream(file);
 
 	if (doc.is_container())
 		...; // succesfully parsed
 
 Use subscripting for array and object values.
-
-	auto doc = krystal::parse(...);
 
 	auto delay = doc["levels"][0]["zombie spawn delay"].number();
 	auto name = doc["levels"][0]["level name"].string();
@@ -56,7 +54,9 @@ For arrays, `first` is a number value with the index, for objects, `first` is th
 Usage
 -----
 
-Add the 3 .cpp files to your project and `#include "krystal.hpp"` where needed and you're done.
+Currently in flux, I'm transitioning over to .hpp files only due to templated class requirements.
+This will make it easy to include in your project though: make the krystal folder findable for
+your compiler and add `#include "krystal.hpp"` to files in which you wish to use krystal.
 
 
 Status
