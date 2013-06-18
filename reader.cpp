@@ -15,8 +15,9 @@ namespace krystal {
 	void reader::parse_literal(std::istream& is) {
 		static std::string null_tok {"null"}, true_tok{"true"}, false_tok{"false"};
 
-		std::ostringstream token;
+		static std::ostringstream token;
 		auto ch = is.peek();
+		token.str({});
 		
 		while (ch >= 'a' && ch <= 'z') {
 			token << (char)is.get();
@@ -92,7 +93,8 @@ namespace krystal {
 
 	
 	void reader::parse_string(std::istream& is) {
-		std::ostringstream ss;
+		static std::ostringstream ss;
+		ss.str({});
 		
 		auto unicode_hex_number = [&]{
 			int digits = 4, number = 0;

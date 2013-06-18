@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+#include <chrono>
 
 #include "krystal.hpp"
 #include "Inquisition/Inquisition.h"
@@ -24,11 +25,13 @@ static std::vector<value_type> all_types() {
 #include "test_value.hpp"
 #include "test_reader.hpp"
 #include "test_jsonchecker.hpp"
+#include "test_performance.hpp"
 
 int main() {
 	test_value();
 	test_reader();
 	test_jsonchecker();
+	test_performance();
 	
 	auto r = makeReport<SimpleTestReport>(std::ref(std::cout));
 	runAll(r);

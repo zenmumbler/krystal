@@ -40,6 +40,7 @@
 		8E0710461765C8A7009467EC /* reader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = reader.hpp; sourceTree = "<group>"; };
 		8E0710481765C8ED009467EC /* value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = value.cpp; sourceTree = "<group>"; };
 		8E0710491765C8ED009467EC /* value.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = value.hpp; sourceTree = "<group>"; };
+		8EC6592F177052150013513E /* test_performance.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = test_performance.hpp; path = test/test_performance.hpp; sourceTree = "<group>"; };
 		8EE2B272176B38FC0046FC5B /* checks.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = checks.cpp; path = ../Inquisition/checks.cpp; sourceTree = "<group>"; };
 		8EE2B273176B38FC0046FC5B /* helpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = helpers.cpp; path = ../Inquisition/helpers.cpp; sourceTree = "<group>"; };
 		8EE2B274176B38FC0046FC5B /* Inquisition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Inquisition.cpp; path = ../Inquisition/Inquisition.cpp; sourceTree = "<group>"; };
@@ -105,6 +106,7 @@
 			children = (
 				8EE2B271176B38D20046FC5B /* inquisition */,
 				8E07103F1764EE12009467EC /* krystal_test.cpp */,
+				8EC6592F177052150013513E /* test_performance.hpp */,
 				8EF50D72176E2A64000086DF /* test_reader.hpp */,
 				8EF50D71176E286E000086DF /* test_value.hpp */,
 				8EF50D74176E5651000086DF /* test_jsonchecker.hpp */,

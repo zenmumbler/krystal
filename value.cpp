@@ -187,6 +187,9 @@ namespace krystal {
 		if (! is_object())
 			throw std::runtime_error("Trying to insert a keyval into a non-object value.");
 
+		if (contains(key))
+			obj_.erase(key); // duplicate key, latest wins as per behaviour in all other JSON parsers
+
 		obj_.emplace(key, std::move(val));
 	}
 
