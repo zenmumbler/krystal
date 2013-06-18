@@ -12,7 +12,7 @@ void test_jsonchecker() {
 					continue;
 				
 				std::ifstream fail_file{ "jsonchecker/fail" + to_string(tix) + ".json" };
-				auto val = krystal::parse(fail_file);
+				auto val = krystal::parse_stream(fail_file);
 				check_equal(val.type(), value_type::Null);
 			}
 		});
@@ -22,14 +22,14 @@ void test_jsonchecker() {
 			
 			for (int tix=1; tix <= valid_tests; ++tix) {
 				std::ifstream pass_file{ "jsonchecker/pass" + to_string(tix) + ".json" };
-				auto val = krystal::parse(pass_file);
+				auto val = krystal::parse_stream(pass_file);
 				check_true(val.is_container());
 			}
 		});
 		
 		test("pass1.json document parse should yield exact document equivalent", []{
 			std::ifstream pass_file{ "jsonchecker/pass1.json" };
-			auto doc = krystal::parse(pass_file);
+			auto doc = krystal::parse_stream(pass_file);
 
 			auto check_type_and_str = [](const value& val, const std::string& sval) {
 				return check_equal(val.type(), value_type::String) && check_equal(val.string(), sval);
@@ -154,7 +154,7 @@ void test_jsonchecker() {
 
 		test("pass2.json enormous subscript access should work", []{
 			std::ifstream pass_file{ "jsonchecker/pass2.json" };
-			auto doc = krystal::parse(pass_file);
+			auto doc = krystal::parse_stream(pass_file);
 
 			check_equal(doc[0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0].string(), "Not too deep");
 		});

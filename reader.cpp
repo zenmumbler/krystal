@@ -38,10 +38,10 @@ namespace krystal {
 
 	
 	void reader::parse_number(std::istream& is) {
-		std::stringstream token;
+		static std::stringstream token;
 		decltype(is.peek()) ch;
 		
-		auto munch = [&]{ token << (char)is.get(); ch = is.peek(); };
+		auto munch = [&is,&ch]{ token << (char)is.get(); ch = is.peek(); };
 		
 		ch = is.peek();
 		if (ch == '-')
@@ -87,6 +87,7 @@ namespace krystal {
 		
 		double val;
 		token >> val;
+		token.str({});
 
 		delegate_->number_value(val);
 	}

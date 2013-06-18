@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <chrono>
 
-#include "krystal.hpp"
+#include "krystal2.hpp"
 #include "Inquisition/Inquisition.h"
 
 using namespace Inquisition;
