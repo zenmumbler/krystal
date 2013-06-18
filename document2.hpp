@@ -13,29 +13,28 @@ namespace krystal {
 	namespace { const std::string DOC_ROOT_KEY {"___DOCUMENT___"}; }
 
 	class document_builder : public reader_delegate {
-		value root_;
+		value root_, *cur_node_ = nullptr;
 		std::vector<value*> context_stack_;
 		std::string next_key_;
 		
 		friend class reader;
 		
 		void append(value val) {
-			auto cur_node = context_stack_.back();
 			bool val_is_container = val.is_container();
 			
-			if (cur_node->is_object()) {
-				cur_node->insert(next_key_, std::move(val));
+			if (cur_node_->is_object()) {
+				auto mv = &cur_node_->insert(next_key_, std::move(val));
 				if (val_is_container) {
-					auto mv = &(*cur_node)[next_key_];
 					context_stack_.push_back(mv);
+					cur_node_ = mv;
 				}
 				next_key_.clear();
 			}
 			else { // array
-				cur_node->push_back(std::move(val));
+				auto mv = &cur_node_->push_back(std::move(val));
 				if (val_is_container) {
-					auto mv = &(*cur_node)[cur_node->size()-1];
 					context_stack_.push_back(mv);
+					cur_node_ = mv;
 				}
 			}
 		}
@@ -57,7 +56,7 @@ namespace krystal {
 		}
 		
 		void string_value(const std::string& str) {
-			if (context_stack_.back()->is_array() || next_key_.size())
+			if (cur_node_->is_array() || next_key_.size())
 				append(str);
 			else
 				next_key_ = str;
@@ -69,6 +68,7 @@ namespace krystal {
 		
 		void array_end() {
 			context_stack_.pop_back();
+			cur_node_ = context_stack_.back();
 		}
 		
 		void object_begin() {
@@ -77,6 +77,7 @@ namespace krystal {
 		
 		void object_end() {
 			context_stack_.pop_back();
+			cur_node_ = context_stack_.back();
 		}
 		
 		void error(const std::string& msg, ptrdiff_t offset) {
@@ -89,6 +90,7 @@ namespace krystal {
 		, next_key_{ DOC_ROOT_KEY }
 		{
 			context_stack_.push_back(&root_);
+			cur_node_ = &root_;
 		}
 		
 		value document() {

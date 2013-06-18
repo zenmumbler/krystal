@@ -6,7 +6,6 @@
 
 #include <iosfwd>
 #include <sstream>
-#include <vector>
 #include "value.hpp"
 
 namespace krystal {

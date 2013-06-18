@@ -183,21 +183,22 @@ namespace krystal {
 		return obj_.find(key) != obj_.cend();
 	}
 	
-	void value::insert(std::string key, value&& val) {
+	value& value::insert(std::string key, value&& val) {
 		if (! is_object())
 			throw std::runtime_error("Trying to insert a keyval into a non-object value.");
 
 		if (contains(key))
 			obj_.erase(key); // duplicate key, latest wins as per behaviour in all other JSON parsers
 
-		obj_.emplace(key, std::move(val));
+		return obj_.emplace(key, std::move(val)).first.operator*().second;
 	}
 
-	void value::push_back(value&& val) {
+	value& value::push_back(value&& val) {
 		if (! is_array())
 			throw std::runtime_error("Trying to push_back a value into a non-array value.");
 	
 		arr_.push_back(std::move(val));
+		return arr_.back();
 	}
 	
 	const value& value::operator[](const std::string& key) const {

@@ -94,8 +94,8 @@ namespace krystal {
 		size_t size() const;
 		bool contains(const std::string& key) const;
 
-		void insert(std::string key, value&& val);
-		void push_back(value&& val);
+		value& insert(std::string key, value&& val);
+		value& push_back(value&& val);
 		
 		const value& operator[](const std::string& key) const;
 		value& operator[](const std::string& key);
