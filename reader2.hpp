@@ -121,17 +121,18 @@ namespace krystal {
 
 		template<typename ForwardIterator>
 		void parse_number(reader_stream<ForwardIterator>& is) {
-			using char_type = typename std::remove_reference<decltype(is)>::type::char_type;
-
-			static std::vector<char_type> token;
-			token.reserve(64);
 			decltype(is.peek()) ch;
 			
-			auto munch = [&is,&ch]{ token.push_back((char_type)is.get()); ch = is.peek(); };
+			auto munch = [&]{ is.get(); ch = is.peek(); };
+			bool minus = false, exp_minus = false;
+			double int_part = 0.0, frac_part = 0.0;
+			int exp_part = 0, frac_digits = 0;
 			
 			ch = is.peek();
-			if (ch == '-')
+			if (ch == '-') {
+				minus = true;
 				munch();
+			}
 			
 			ch = is.peek();
 			if (ch == '0')
@@ -142,6 +143,7 @@ namespace krystal {
 					return;
 				}
 				do {
+					int_part = (10.0 * int_part) + static_cast<double>(ch - '0');
 					munch();
 				} while (ch >= '0' && ch <= '9');
 			}
@@ -154,26 +156,39 @@ namespace krystal {
 					return;
 				}
 				do {
+					frac_part = (10.0 * frac_part) + static_cast<double>(ch - '0');
+					++frac_digits;
 					munch();
 				} while (ch >= '0' && ch <= '9');
+
+				frac_part *= std::pow(10.0, -frac_digits);
 			}
 			
 			if (ch == 'e' || ch == 'E') {
 				munch();
-				if (ch == '+' || ch == '-')
+				if (ch == '-') {
+					exp_minus = true;
+					munch();
+				}
+				else if (ch == '+')
 					munch();
 				if (ch < '0' || ch > '9') {
 					error("The exponent part of a number must have at least 1 digit", is);
 					return;
 				}
 				do {
+					exp_part = (10 * exp_part) + static_cast<int>(ch - '0');
 					munch();
 				} while (ch >= '0' && ch <= '9');
 			}
-			
-			token.push_back(char_type{0});
-			double val = std::strtod(token.data(), nullptr);
-			token.clear();
+
+			double val = int_part + frac_part;
+			if (exp_part != 0.0) {
+				if (exp_minus) exp_part = -exp_part;
+				val *= std::pow(10.0, exp_part);
+			}
+			if (minus)
+				val = -val;
 			
 			delegate_->number_value(val);
 		}

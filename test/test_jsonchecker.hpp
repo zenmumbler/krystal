@@ -35,7 +35,13 @@ void test_jsonchecker() {
 				return check_equal(val.type(), value_type::String) && check_equal(val.string(), sval);
 			};
 			auto check_type_and_num = [](const value& val, double nval) {
-				return check_equal(val.type(), value_type::Number) && check_equal(val.number(), nval);
+				// FIXME: move this to Inquisition itself
+				auto equal_double = [](double a, double b) {
+					return (std::abs(a-b) < 2.0 * std::numeric_limits<double>::epsilon() || // For small a, b
+					        std::abs(a-b) < std::min(a, b) / 1.0e15); // for large a, b
+				};
+				
+				return check_equal(val.type(), value_type::Number) && check_true(equal_double(val.number(), nval));
 			};
 			auto check_type_and_size = [](const value& val, value_type type, size_t size) {
 				return check_equal(val.type(), type) && check_equal(val.size(), size);
