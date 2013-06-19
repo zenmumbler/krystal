@@ -21,21 +21,18 @@ namespace krystal {
 		
 		void append(value val) {
 			bool val_is_container = val.is_container();
+			value* mv;
 			
 			if (cur_node_->is_object()) {
-				auto mv = &cur_node_->insert(next_key_, std::move(val));
-				if (val_is_container) {
-					context_stack_.push_back(mv);
-					cur_node_ = mv;
-				}
+				mv = &cur_node_->insert(next_key_, std::move(val));
 				next_key_.clear();
 			}
-			else { // array
-				auto mv = &cur_node_->push_back(std::move(val));
-				if (val_is_container) {
-					context_stack_.push_back(mv);
-					cur_node_ = mv;
-				}
+			else // array
+				mv = &cur_node_->push_back(std::move(val));
+
+			if (val_is_container) {
+				context_stack_.push_back(mv);
+				cur_node_ = mv;
 			}
 		}
 		
