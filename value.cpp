@@ -39,6 +39,7 @@ namespace krystal {
 				break;
 			case value_type::Array:
 				new (&arr_) decltype(arr_){};
+				arr_.reserve(2);
 				break;
 			case value_type::Object:
 				new (&obj_) decltype(obj_){};

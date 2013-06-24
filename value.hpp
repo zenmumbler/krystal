@@ -14,6 +14,8 @@
 #include <unordered_map>
 #include <iosfwd>
 
+#include "alloc.hpp"
+
 namespace krystal {
 
 	enum class value_type {
@@ -31,17 +33,16 @@ namespace krystal {
 	class iterator;
 	
 	
-
 	class value {
-		using string_data = std::string;
+		using string_data = std::basic_string<char, std::char_traits<char>>;
 		using array_data = std::vector<value>;
 		using object_data = std::unordered_map<std::string, value>;
 
 		using array_iterator = typename array_data::const_iterator;
 		using object_iterator = typename object_data::const_iterator;
-		
+
 		friend class iterator;
-		
+
 		value_type type_;
 		union {
 			string_data str_;
@@ -49,7 +50,7 @@ namespace krystal {
 			object_data obj_;
 			double num_;
 		};
-		
+
 	public:
 		value() : value(value_type::Null) {}
 		value(const value& rhs) = delete;
@@ -147,7 +148,8 @@ namespace krystal {
 			if (is_object)
 				++obj_it;
 			else {
-				++arr_it; ++arr_index;
+				++arr_it;
+				++arr_index;
 			}
 			return *this;
 		}
@@ -166,7 +168,6 @@ namespace krystal {
 			return !this->operator==(rhs);
 		}
 	};
-
 }
 
 #endif

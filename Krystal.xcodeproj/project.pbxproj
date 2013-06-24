@@ -34,6 +34,7 @@
 		8E07103F1764EE12009467EC /* krystal_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = krystal_test.cpp; path = test/krystal_test.cpp; sourceTree = "<group>"; };
 		8E0710481765C8ED009467EC /* value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = value.cpp; sourceTree = "<group>"; };
 		8E0710491765C8ED009467EC /* value.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = value.hpp; sourceTree = "<group>"; };
+		8E76A3CB17765EB80055E5E8 /* alloc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = alloc.hpp; sourceTree = "<group>"; };
 		8E7A845C1770B7EB00823314 /* document2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = document2.hpp; sourceTree = "<group>"; };
 		8E7A845D1770B88600823314 /* krystal2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = krystal2.hpp; sourceTree = "<group>"; };
 		8EC6592F177052150013513E /* test_performance.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = test_performance.hpp; path = test/test_performance.hpp; sourceTree = "<group>"; };
@@ -87,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				8E0710481765C8ED009467EC /* value.cpp */,
+				8E76A3CB17765EB80055E5E8 /* alloc.hpp */,
 				8E0710491765C8ED009467EC /* value.hpp */,
 				8EC6595B1770AB180013513E /* reader2.hpp */,
 				8E7A845C1770B7EB00823314 /* document2.hpp */,

@@ -86,6 +86,7 @@ namespace krystal {
 		: root_{ value_type::Object }
 		, next_key_{ DOC_ROOT_KEY }
 		{
+			context_stack_.reserve(32);
 			context_stack_.push_back(&root_);
 			cur_node_ = &root_;
 		}
