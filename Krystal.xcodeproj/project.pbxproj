@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8E0710411764EE12009467EC /* krystal_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07103F1764EE12009467EC /* krystal_test.cpp */; };
-		8E07104A1765C8ED009467EC /* value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E0710481765C8ED009467EC /* value.cpp */; };
+		8ECCAE431778EE9B00915353 /* value2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8ECCAE421778EE9B00915353 /* value2.cpp */; };
 		8EE2B278176B38FC0046FC5B /* checks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EE2B272176B38FC0046FC5B /* checks.cpp */; };
 		8EE2B279176B38FC0046FC5B /* helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EE2B273176B38FC0046FC5B /* helpers.cpp */; };
 		8EE2B27A176B38FC0046FC5B /* Inquisition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EE2B274176B38FC0046FC5B /* Inquisition.cpp */; };
@@ -32,13 +32,13 @@
 /* Begin PBXFileReference section */
 		8E0710331764EDC9009467EC /* krystal_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = krystal_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E07103F1764EE12009467EC /* krystal_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = krystal_test.cpp; path = test/krystal_test.cpp; sourceTree = "<group>"; };
-		8E0710481765C8ED009467EC /* value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = value.cpp; sourceTree = "<group>"; };
-		8E0710491765C8ED009467EC /* value.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = value.hpp; sourceTree = "<group>"; };
 		8E76A3CB17765EB80055E5E8 /* alloc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = alloc.hpp; sourceTree = "<group>"; };
-		8E7A845C1770B7EB00823314 /* document2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = document2.hpp; sourceTree = "<group>"; };
 		8E7A845D1770B88600823314 /* krystal2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = krystal2.hpp; sourceTree = "<group>"; };
 		8EC6592F177052150013513E /* test_performance.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = test_performance.hpp; path = test/test_performance.hpp; sourceTree = "<group>"; };
-		8EC6595B1770AB180013513E /* reader2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = reader2.hpp; sourceTree = "<group>"; };
+		8EC6595B1770AB180013513E /* reader2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = reader2.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		8ECCAE401778AF3000915353 /* value2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = value2.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		8ECCAE411778B1F400915353 /* document3.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = document3.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		8ECCAE421778EE9B00915353 /* value2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = value2.cpp; sourceTree = "<group>"; };
 		8EE2B272176B38FC0046FC5B /* checks.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = checks.cpp; path = ../Inquisition/checks.cpp; sourceTree = "<group>"; };
 		8EE2B273176B38FC0046FC5B /* helpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = helpers.cpp; path = ../Inquisition/helpers.cpp; sourceTree = "<group>"; };
 		8EE2B274176B38FC0046FC5B /* Inquisition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Inquisition.cpp; path = ../Inquisition/Inquisition.cpp; sourceTree = "<group>"; };
@@ -46,14 +46,14 @@
 		8EE2B276176B38FC0046FC5B /* TestReport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TestReport.cpp; path = ../Inquisition/TestReport.cpp; sourceTree = "<group>"; };
 		8EE2B277176B38FC0046FC5B /* TestRun.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TestRun.cpp; path = ../Inquisition/TestRun.cpp; sourceTree = "<group>"; };
 		8EE2B27E176B3B740046FC5B /* checks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = checks.h; path = ../Inquisition/checks.h; sourceTree = "<group>"; };
-		8EE2B27F176B3B740046FC5B /* helpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = helpers.h; path = ../Inquisition/helpers.h; sourceTree = "<group>"; };
+		8EE2B27F176B3B740046FC5B /* helpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = helpers.h; path = ../Inquisition/helpers.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		8EE2B280176B3B740046FC5B /* Inquisition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Inquisition.h; path = ../Inquisition/Inquisition.h; sourceTree = "<group>"; };
 		8EE2B281176B3B740046FC5B /* Test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Test.h; path = ../Inquisition/Test.h; sourceTree = "<group>"; };
 		8EE2B282176B3B740046FC5B /* TestReport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TestReport.h; path = ../Inquisition/TestReport.h; sourceTree = "<group>"; };
 		8EE2B283176B3B740046FC5B /* TestRun.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TestRun.h; path = ../Inquisition/TestRun.h; sourceTree = "<group>"; };
-		8EF50D71176E286E000086DF /* test_value.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = test_value.hpp; path = test/test_value.hpp; sourceTree = "<group>"; };
+		8EF50D71176E286E000086DF /* test_value.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = test_value.hpp; path = test/test_value.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		8EF50D72176E2A64000086DF /* test_reader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = test_reader.hpp; path = test/test_reader.hpp; sourceTree = "<group>"; };
-		8EF50D74176E5651000086DF /* test_jsonchecker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = test_jsonchecker.hpp; path = test/test_jsonchecker.hpp; sourceTree = "<group>"; };
+		8EF50D74176E5651000086DF /* test_jsonchecker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = test_jsonchecker.hpp; path = test/test_jsonchecker.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,11 +87,11 @@
 		8E07103D1764EDE0009467EC /* krystal */ = {
 			isa = PBXGroup;
 			children = (
-				8E0710481765C8ED009467EC /* value.cpp */,
 				8E76A3CB17765EB80055E5E8 /* alloc.hpp */,
-				8E0710491765C8ED009467EC /* value.hpp */,
+				8ECCAE421778EE9B00915353 /* value2.cpp */,
+				8ECCAE401778AF3000915353 /* value2.hpp */,
 				8EC6595B1770AB180013513E /* reader2.hpp */,
-				8E7A845C1770B7EB00823314 /* document2.hpp */,
+				8ECCAE411778B1F400915353 /* document3.hpp */,
 				8E7A845D1770B88600823314 /* krystal2.hpp */,
 			);
 			name = krystal;
@@ -185,7 +185,7 @@
 				8E0710411764EE12009467EC /* krystal_test.cpp in Sources */,
 				8EE2B27A176B38FC0046FC5B /* Inquisition.cpp in Sources */,
 				8EE2B27C176B38FC0046FC5B /* TestReport.cpp in Sources */,
-				8E07104A1765C8ED009467EC /* value.cpp in Sources */,
+				8ECCAE431778EE9B00915353 /* value2.cpp in Sources */,
 				8EE2B27D176B38FC0046FC5B /* TestRun.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -242,7 +242,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SYMROOT = "";
+				SYMROOT = test;
 			};
 			name = Debug;
 		};
@@ -276,7 +276,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SYMROOT = "";
+				SYMROOT = test;
 			};
 			name = Release;
 		};

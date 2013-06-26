@@ -143,14 +143,14 @@ void test_value() {
 		group("arrays", []{
 			test("normal indexed for loop should iterate over all values linearly", []{
 				auto arr = value{ value_type::Array };
-				arr.push_back(value{ std::string{"*", 10} });
-				arr.push_back(value{ std::string{"*", 20} });
-				arr.push_back(value{ std::string{"*", 30} });
-				arr.push_back(value{ std::string{"*", 40} });
+				arr.push_back(value{ std::string{10, '*'} });
+				arr.push_back(value{ std::string{20, '*'} });
+				arr.push_back(value{ std::string{30, '*'} });
+				arr.push_back(value{ std::string{40, '*'} });
 				
 				for (auto ix=0L; ix<arr.size(); ++ix) {
 					const auto& val = arr[ix];
-					check_equal(val.string(), std::string{"*", 10 * (ix + 1)});
+					check_equal(val.string(), std::string{10 * (ix + 1), '*'});
 				}
 			});
 			
