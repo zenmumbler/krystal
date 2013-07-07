@@ -13,7 +13,7 @@ namespace krystal {
 		size_t block_size_;
 		uint8_t *arena_, *pos_;
 		
-		const size_t DefaultBlockSize = 64 * 1024;
+		static constexpr const size_t DefaultBlockSize = 64 * 1024;
 		
 	public:
 		lake(const size_t block_size) {

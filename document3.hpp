@@ -11,6 +11,55 @@
 
 namespace krystal {
 
+	template <typename ValueClass>
+	class document {
+		std::unique_ptr<krystal::lake> mem_pool_;
+		ValueClass root_;
+
+	public:
+		using value_type = ValueClass;
+
+		document(std::unique_ptr<krystal::lake> mem_pool, ValueClass&& root)
+		: mem_pool_ { std::move(mem_pool) }, root_ { std::move(root) }
+		{}
+
+		// forward const value APIs (container ones only, as a doc can only be array, object or null)
+		inline value_kind type() const { return root_.type(); }
+		inline bool is_a(const value_kind vtype) const { return type() == vtype; }
+		bool is_null() const { return is_a(value_kind::Null); }
+		bool is_false() const { return is_a(value_kind::False); }
+		bool is_true() const { return is_a(value_kind::True); }
+		bool is_bool() const { return is_false() || is_true(); }
+		bool is_number() const { return is_a(value_kind::Number); }
+		bool is_string() const { return is_a(value_kind::String); }
+		bool is_array() const { return is_a(value_kind::Array); }
+		bool is_object() const { return is_a(value_kind::Object); }
+		bool is_container() const { return is_object() || is_array(); }
+
+		size_t size() const { return root_.size(); }
+		
+		bool contains(const std::string& key) const { return root_.contains(key); }
+		
+		const ValueClass& operator[](const std::string& key) const { return root_[key]; }
+		const ValueClass& operator[](const size_t index) const { return root_[index]; }
+		
+		decltype(root_.begin()) begin() const { return root_.begin(); }
+		decltype(root_.end()) end() const { return root_.end(); }
+		
+		void debugPrint(std::ostream& os) const { root_.debugPrint(os); }
+	};
+
+	// document non-members
+	template <typename ValueClass>
+	auto begin(const document<ValueClass>& d) -> decltype(d.begin()) { return d.begin(); }
+	template <typename ValueClass>
+	auto end(const document<ValueClass>& d) -> decltype(d.end()) { return d.end(); }
+
+	template <typename ValueClass>
+	std::ostream& operator<<(std::ostream& os, const document<ValueClass>& t) { t.debugPrint();	}
+
+
+
 	namespace { const std::string DOC_ROOT_KEY {"___DOCUMENT___"}; }
 	
 	template <typename CharT>
@@ -18,6 +67,7 @@ namespace krystal {
 		template <typename U>
 		using Allocator = std::allocator<U>;
 
+		std::unique_ptr<krystal::lake> mem_pool_;
 		basic_value<CharT, Allocator> root_, *cur_node_ = nullptr;
 		std::vector<basic_value<CharT, Allocator>*> context_stack_;
 		std::string next_key_;
@@ -42,15 +92,15 @@ namespace krystal {
 		}
 		
 		void null_value() {
-			append({ value_type::Null });
+			append({ value_kind::Null });
 		}
 		
 		void false_value() {
-			append({ value_type::False });
+			append({ value_kind::False });
 		}
 		
 		void true_value() {
-			append({ value_type::True });
+			append({ value_kind::True });
 		}
 		
 		void number_value(double num) {
@@ -65,7 +115,7 @@ namespace krystal {
 		}
 		
 		void array_begin() {
-			append({ value_type::Array });
+			append({ value_kind::Array });
 		}
 		
 		void array_end() {
@@ -74,7 +124,7 @@ namespace krystal {
 		}
 		
 		void object_begin() {
-			append({ value_type::Object });
+			append({ value_kind::Object });
 		}
 		
 		void object_end() {
@@ -88,7 +138,8 @@ namespace krystal {
 
 	public:
 		document_builder()
-		: root_{ value_type::Object }
+		: mem_pool_ { new krystal::lake() }
+		, root_{ value_kind::Object }
 		, next_key_{ DOC_ROOT_KEY }
 		{
 			context_stack_.reserve(32);
@@ -96,16 +147,12 @@ namespace krystal {
 			cur_node_ = &root_;
 		}
 		
-		basic_value<CharT, Allocator> document() {
+		document<basic_value<CharT, Allocator>> document() {
 			// the document_builder instance is useless after the call to document()
-			return std::move(root_[DOC_ROOT_KEY]);
+			return { std::move(mem_pool_), std::move(root_[DOC_ROOT_KEY]) };
 		}
 	};
 
-
-
-	// -- standard value types
-	using value = decltype(document_builder<char>().document());
 
 
 
@@ -121,7 +168,7 @@ namespace krystal {
 		reader_stream<ForwardIterator> ris { std::move(first), std::move(last) };
 		
 		if (! r.parse_document(ris))
-			return { value_type::Null };
+			return { { nullptr }, { value_kind::Null } };
 		
 		return delegate->document();
 	}

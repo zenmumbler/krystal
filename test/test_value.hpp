@@ -6,10 +6,10 @@ void test_value() {
 		group("type constructors", []{
 			test("default constructor creates null value", []{
 				value v;
-				check_equal(v.type(), value_type::Null);
+				check_equal(v.type(), value_kind::Null);
 			});
 			
-			test("value_type constructor creates value of that type", []{
+			test("value_kind constructor creates value of that kind", []{
 				for (auto type : all_types())
 					check_equal((value{ type }).type(), type);
 			});
@@ -56,7 +56,7 @@ void test_value() {
 					auto source = value{type};
 					auto dest = std::move(source);
 					
-					check_equal(source.type(), value_type::Null);
+					check_equal(source.type(), value_kind::Null);
 					check_equal(dest.type(), type);
 				});
 				
@@ -65,7 +65,7 @@ void test_value() {
 					auto dest = value{};
 					dest = std::move(source);
 					
-					check_equal(source.type(), value_type::Null);
+					check_equal(source.type(), value_kind::Null);
 					check_equal(dest.type(), type);
 				});
 			}
@@ -75,8 +75,8 @@ void test_value() {
 				iv = value{ 100 },
 				dv = value{ 48390.32789 },
 				sv = value{ "some string" },
-				av = value{ value_type::Array },
-				ov = value{ value_type::Object };
+				av = value{ value_kind::Array },
+				ov = value{ value_kind::Object };
 				
 				av.push_back(value{ 50 });
 				av.push_back(value{ true });
@@ -109,40 +109,40 @@ void test_value() {
 			for (auto type : all_types()) {
 				test("param and direct tests should be equal for " + to_string(type), [type]{
 					auto val = value{type};
-					check_equal(val.is_null(),   val.is_a(value_type::Null));
-					check_equal(val.is_false(),  val.is_a(value_type::False));
-					check_equal(val.is_true(),   val.is_a(value_type::True));
-					check_equal(val.is_number(), val.is_a(value_type::Number));
-					check_equal(val.is_string(), val.is_a(value_type::String));
-					check_equal(val.is_array(),  val.is_a(value_type::Array));
-					check_equal(val.is_object(), val.is_a(value_type::Object));
+					check_equal(val.is_null(),   val.is_a(value_kind::Null));
+					check_equal(val.is_false(),  val.is_a(value_kind::False));
+					check_equal(val.is_true(),   val.is_a(value_kind::True));
+					check_equal(val.is_number(), val.is_a(value_kind::Number));
+					check_equal(val.is_string(), val.is_a(value_kind::String));
+					check_equal(val.is_array(),  val.is_a(value_kind::Array));
+					check_equal(val.is_object(), val.is_a(value_kind::Object));
 				});
 			}
 			
 			test("only container types should identify as such", []{
-				check_false((value{ value_type::Null }).is_container());
-				check_false((value{ value_type::False }).is_container());
-				check_false((value{ value_type::True }).is_container());
-				check_false((value{ value_type::Number }).is_container());
-				check_false((value{ value_type::String }).is_container());
-				check_true ((value{ value_type::Array }).is_container());
-				check_true ((value{ value_type::Object }).is_container());
+				check_false((value{ value_kind::Null }).is_container());
+				check_false((value{ value_kind::False }).is_container());
+				check_false((value{ value_kind::True }).is_container());
+				check_false((value{ value_kind::Number }).is_container());
+				check_false((value{ value_kind::String }).is_container());
+				check_true ((value{ value_kind::Array }).is_container());
+				check_true ((value{ value_kind::Object }).is_container());
 			});
 			
 			test("only bool types should identify as such", []{
-				check_false((value{ value_type::Null }).is_bool());
-				check_true ((value{ value_type::False }).is_bool());
-				check_true ((value{ value_type::True }).is_bool());
-				check_false((value{ value_type::Number }).is_bool());
-				check_false((value{ value_type::String }).is_bool());
-				check_false((value{ value_type::Array }).is_bool());
-				check_false((value{ value_type::Object }).is_bool());
+				check_false((value{ value_kind::Null }).is_bool());
+				check_true ((value{ value_kind::False }).is_bool());
+				check_true ((value{ value_kind::True }).is_bool());
+				check_false((value{ value_kind::Number }).is_bool());
+				check_false((value{ value_kind::String }).is_bool());
+				check_false((value{ value_kind::Array }).is_bool());
+				check_false((value{ value_kind::Object }).is_bool());
 			});
 		});
 		
 		group("arrays", []{
 			test("normal indexed for loop should iterate over all values linearly", []{
-				auto arr = value{ value_type::Array };
+				auto arr = value{ value_kind::Array };
 				arr.push_back(value{ std::string{10, '*'} });
 				arr.push_back(value{ std::string{20, '*'} });
 				arr.push_back(value{ std::string{30, '*'} });
@@ -155,7 +155,7 @@ void test_value() {
 			});
 			
 			test("range-based for should iterate over all index-value pairs linearly", []{
-				auto arr = value{ value_type::Array };
+				auto arr = value{ value_kind::Array };
 				arr.push_back(value{ 0 });
 				arr.push_back(value{ 100 });
 				arr.push_back(value{ 200 });
@@ -173,7 +173,7 @@ void test_value() {
 		
 		group("objects", []{
 			test("range-based for should iterate over all key-value pairs in undefined order", []{
-				auto obj = value{ value_type::Object };
+				auto obj = value{ value_kind::Object };
 				obj.insert("key0", value{ false });
 				obj.insert("key1", value{ true });
 				obj.insert("key2", value{ false });

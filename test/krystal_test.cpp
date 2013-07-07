@@ -14,11 +14,11 @@
 using namespace Inquisition;
 using namespace krystal;
 
-static std::vector<value_type> all_types() {
+static std::vector<value_kind> all_types() {
 	return {
-		value_type::Null, value_type::False, value_type::True,
-		value_type::Number, value_type::String,
-		value_type::Array, value_type::Object
+		value_kind::Null, value_kind::False, value_kind::True,
+		value_kind::Number, value_kind::String,
+		value_kind::Array, value_kind::Object
 	};
 }
 

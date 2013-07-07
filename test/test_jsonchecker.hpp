@@ -13,7 +13,7 @@ void test_jsonchecker() {
 				
 				std::ifstream fail_file{ "jsonchecker/fail" + to_string(tix) + ".json" };
 				auto val = krystal::parse_stream(fail_file);
-				check_equal(val.type(), value_type::Null);
+				check_equal(val.type(), value_kind::Null);
 			}
 		});
 
@@ -30,9 +30,10 @@ void test_jsonchecker() {
 		test("pass1.json document parse should yield exact document equivalent", []{
 			std::ifstream pass_file{ "jsonchecker/pass1.json" };
 			auto doc = krystal::parse_stream(pass_file);
+			using value = decltype(doc)::value_type;
 
 			auto check_type_and_str = [](const value& val, const std::string& sval) {
-				return check_equal(val.type(), value_type::String) && check_equal(val.string(), sval);
+				return check_equal(val.type(), value_kind::String) && check_equal(val.string(), sval);
 			};
 			auto check_type_and_num = [](const value& val, double nval) {
 				// FIXME: move this to Inquisition itself
@@ -41,9 +42,9 @@ void test_jsonchecker() {
 					        std::abs(a-b) < std::min(a, b) / 1.0e15); // for large a, b
 				};
 				
-				return check_equal(val.type(), value_type::Number) && check_true(equal_double(val.number(), nval));
+				return check_equal(val.type(), value_kind::Number) && check_true(equal_double(val.number(), nval));
 			};
-			auto check_type_and_size = [](const value& val, value_type type, size_t size) {
+			auto check_type_and_size = [](const value& val, value_kind type, size_t size) {
 				return check_equal(val.type(), type) && check_equal(val.size(), size);
 			};
 			auto check_has_key = [](const value&val, const std::string& key) {
@@ -52,14 +53,14 @@ void test_jsonchecker() {
 			
 			if (check_true(doc.is_array()) && check_equal(doc.size(), 20)) {
 				check_type_and_str(doc[0], "JSON Test Pattern pass1");
-				check_type_and_size(doc[1], value_type::Object, 1);
-				check_type_and_size(doc[2], value_type::Object, 0);
-				check_type_and_size(doc[3], value_type::Array, 0);
+				check_type_and_size(doc[1], value_kind::Object, 1);
+				check_type_and_size(doc[2], value_kind::Object, 0);
+				check_type_and_size(doc[3], value_kind::Array, 0);
 				check_type_and_num(doc[4], -42);
-				check_equal(doc[5].type(), value_type::True);
-				check_equal(doc[6].type(), value_type::False);
-				check_equal(doc[7].type(), value_type::Null);
-				check_type_and_size(doc[8], value_type::Object, 32);
+				check_equal(doc[5].type(), value_kind::True);
+				check_equal(doc[6].type(), value_kind::False);
+				check_equal(doc[7].type(), value_kind::Null);
+				check_type_and_size(doc[8], value_kind::Object, 32);
 				check_type_and_num(doc[9], 0.5);
 				check_type_and_num(doc[10], 98.6);
 				check_type_and_num(doc[11], 99.44);
@@ -74,7 +75,7 @@ void test_jsonchecker() {
 				
 				// embedded object doc[1]
 				if (check_has_key(doc[1], "object with 1 member")) {
-					if (check_type_and_size(doc[1]["object with 1 member"], value_type::Array, 1))
+					if (check_type_and_size(doc[1]["object with 1 member"], value_kind::Array, 1))
 						check_type_and_str(doc[1]["object with 1 member"][0], "array with 1 element");
 				}
 
@@ -116,15 +117,15 @@ void test_jsonchecker() {
 					check_type_and_str(doc[8]["hex"], "\u0123\u4567\u89AB\uCDEF\uabcd\uef4A");
 
 				if (check_has_key(doc[8], "true"))
-					check_equal(doc[8]["true"].type(), value_type::True);
+					check_equal(doc[8]["true"].type(), value_kind::True);
 				if (check_has_key(doc[8], "false"))
-					check_equal(doc[8]["false"].type(), value_type::False);
+					check_equal(doc[8]["false"].type(), value_kind::False);
 				if (check_has_key(doc[8], "null"))
-					check_equal(doc[8]["null"].type(), value_type::Null);
+					check_equal(doc[8]["null"].type(), value_kind::Null);
 				if (check_has_key(doc[8], "array"))
-					check_type_and_size(doc[8]["array"], value_type::Array, 0);
+					check_type_and_size(doc[8]["array"], value_kind::Array, 0);
 				if (check_has_key(doc[8], "object"))
-					check_type_and_size(doc[8]["object"], value_type::Object, 0);
+					check_type_and_size(doc[8]["object"], value_kind::Object, 0);
 
 				if (check_has_key(doc[8], "address"))
 					check_type_and_str(doc[8]["address"], "50 St. James Street");
@@ -141,11 +142,11 @@ void test_jsonchecker() {
 				};
 
 				if (check_has_key(doc[8], " s p a c e d ")) {
-					if (check_type_and_size(doc[8][" s p a c e d "], value_type::Array, 7))
+					if (check_type_and_size(doc[8][" s p a c e d "], value_kind::Array, 7))
 						check_1to7_array(doc[8][" s p a c e d "]);
 				}
 				if (check_has_key(doc[8], "compact")) {
-					if (check_type_and_size(doc[8]["compact"], value_type::Array, 7))
+					if (check_type_and_size(doc[8]["compact"], value_kind::Array, 7))
 						check_1to7_array(doc[8]["compact"]);
 				}
 

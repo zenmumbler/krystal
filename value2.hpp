@@ -13,7 +13,7 @@
 
 namespace krystal {
 
-	enum class value_type {
+	enum class value_kind {
 		Null,
 		False,
 		True,
@@ -23,7 +23,7 @@ namespace krystal {
 		Object
 	};
 	
-	std::string to_string(const value_type type);
+	std::string to_string(const value_kind type);
 
 	template <typename CharT, template<typename T> class Allocator>
 	class iterator;
@@ -45,7 +45,7 @@ namespace krystal {
 
 		friend class iterator<CharT, Allocator>;
 
-		value_type type_;
+		value_kind kind_;
 		union {
 			string_data str_;
 			array_data arr_;
@@ -54,24 +54,24 @@ namespace krystal {
 		};
 
 	public:
-		basic_value() : basic_value(value_type::Null) {}
+		basic_value() : basic_value(value_kind::Null) {}
 		basic_value(const basic_value& rhs) = delete;
 		basic_value<CharT, Allocator>& operator=(const basic_value<CharT, Allocator>& rhs) = delete;
 
 		basic_value(basic_value<CharT, Allocator>&& rhs)
-		: type_{rhs.type_}
+		: kind_{rhs.kind_}
 		{
-			switch(type_) {
-				case value_type::String:
+			switch(kind_) {
+				case value_kind::String:
 					new (&str_) decltype(str_){std::move(rhs.str_)};
 					break;
-				case value_type::Array:
+				case value_kind::Array:
 					new (&arr_) decltype(arr_){std::move(rhs.arr_)};
 					break;
-				case value_type::Object:
+				case value_kind::Object:
 					new (&obj_) decltype(obj_){std::move(rhs.obj_)};
 					break;
-				case value_type::Number:
+				case value_kind::Number:
 					num_ = rhs.num_;
 					break;
 				default:
@@ -80,23 +80,23 @@ namespace krystal {
 			
 			// -- destruct and reset rhs's data
 			rhs.~basic_value();
-			rhs.type_ = value_type::Null;
+			rhs.kind_ = value_kind::Null;
 		}
 
 		basic_value<CharT, Allocator>& operator=(basic_value<CharT, Allocator>&& rhs) {
-			if (type_ == rhs.type_) {
+			if (kind_ == rhs.kind_) {
 				// -- no need for con/destructors, straight up move assignment
-				switch(type_) {
-					case value_type::String:
+				switch(kind_) {
+					case value_kind::String:
 						str_ = std::move(rhs.str_);
 						break;
-					case value_type::Array:
+					case value_kind::Array:
 						arr_ = std::move(rhs.arr_);
 						break;
-					case value_type::Object:
+					case value_kind::Object:
 						obj_ = std::move(rhs.obj_);
 						break;
-					case value_type::Number:
+					case value_kind::Number:
 						num_ = rhs.num_;
 						break;
 					default:
@@ -105,18 +105,18 @@ namespace krystal {
 			}
 			else {
 				this->~basic_value();
-				type_ = rhs.type_;
-				switch(type_) {
-					case value_type::String:
+				kind_ = rhs.kind_;
+				switch(kind_) {
+					case value_kind::String:
 						new (&str_) decltype(str_){std::move(rhs.str_)};
 						break;
-					case value_type::Array:
+					case value_kind::Array:
 						new (&arr_) decltype(arr_){std::move(rhs.arr_)};
 						break;
-					case value_type::Object:
+					case value_kind::Object:
 						new (&obj_) decltype(obj_){std::move(rhs.obj_)};
 						break;
-					case value_type::Number:
+					case value_kind::Number:
 						num_ = rhs.num_;
 						break;
 					default:
@@ -126,20 +126,20 @@ namespace krystal {
 			
 			// -- destruct and reset rhs's data
 			rhs.~basic_value();
-			rhs.type_ = value_type::Null;
+			rhs.kind_ = value_kind::Null;
 			
 			return *this;
 		}
 
 		~basic_value() {
-			switch(type_) {
-				case value_type::String:
+			switch(kind_) {
+				case value_kind::String:
 					str_.~basic_string();
 					break;
-				case value_type::Array:
+				case value_kind::Array:
 					arr_.~vector();
 					break;
-				case value_type::Object:
+				case value_kind::Object:
 					obj_.~unordered_map();
 					break;
 				default:
@@ -150,18 +150,18 @@ namespace krystal {
 
 		// conversion constructors
 
-		basic_value(value_type type)
-		: type_{type}
+		basic_value(value_kind type)
+		: kind_{type}
 		{
-			switch(type_) {
-				case value_type::String:
+			switch(kind_) {
+				case value_kind::String:
 					new (&str_) decltype(str_){};
 					break;
-				case value_type::Array:
+				case value_kind::Array:
 					new (&arr_) decltype(arr_){};
 					arr_.reserve(2);
 					break;
-				case value_type::Object:
+				case value_kind::Object:
 					new (&obj_) decltype(obj_){};
 					break;
 				default:
@@ -171,27 +171,27 @@ namespace krystal {
 		}
 
 		basic_value(const std::string& sval)
-		: type_{value_type::String}
+		: kind_{value_kind::String}
 		{
 			new (&str_) decltype(str_){ sval.data(), sval.data() + sval.size() };
 		}
 
 		basic_value(const char* ccval) : basic_value(std::string{ccval}) {}
-		constexpr explicit basic_value(int ival) : type_{value_type::Number}, num_ { (double)ival } {}
-		constexpr explicit basic_value(double dval) : type_{value_type::Number}, num_ { dval } {}
-		constexpr explicit basic_value(bool bval) : type_{bval ? value_type::True : value_type::False}, num_ { 0.0 } {}
+		constexpr explicit basic_value(int ival) : kind_{value_kind::Number}, num_ { (double)ival } {}
+		constexpr explicit basic_value(double dval) : kind_{value_kind::Number}, num_ { dval } {}
+		constexpr explicit basic_value(bool bval) : kind_{bval ? value_kind::True : value_kind::False}, num_ { 0.0 } {}
 
 		// type tests
-		value_type type() const { return type_; }
-		bool is_a(const value_type type) const { return type_ == type; }
-		bool is_null() const { return is_a(value_type::Null); }
-		bool is_false() const { return is_a(value_type::False); }
-		bool is_true() const { return is_a(value_type::True); }
+		value_kind type() const { return kind_; }
+		bool is_a(const value_kind type) const { return kind_ == type; }
+		bool is_null() const { return is_a(value_kind::Null); }
+		bool is_false() const { return is_a(value_kind::False); }
+		bool is_true() const { return is_a(value_kind::True); }
 		bool is_bool() const { return is_false() || is_true(); }
-		bool is_number() const { return is_a(value_type::Number); }
-		bool is_string() const { return is_a(value_type::String); }
-		bool is_array() const { return is_a(value_type::Array); }
-		bool is_object() const { return is_a(value_type::Object); }
+		bool is_number() const { return is_a(value_kind::Number); }
+		bool is_string() const { return is_a(value_kind::String); }
+		bool is_array() const { return is_a(value_kind::Array); }
+		bool is_object() const { return is_a(value_kind::Object); }
 		bool is_container() const { return is_object() || is_array(); }
 		
 		bool boolean() const {
@@ -282,32 +282,37 @@ namespace krystal {
 				
 
 		void debugPrint(std::ostream& os) const {
-			switch(type_) {
-				case value_type::String:
+			switch(kind_) {
+				case value_kind::String:
 					os << '"' << str_ << '"';
 					break;
-				case value_type::Number:
+				case value_kind::Number:
 					os << num_;
 					break;
-				case value_type::Object:
+				case value_kind::Object:
 					os << "Object[" << obj_.size() << "]";
 					break;
-				case value_type::Array:
+				case value_kind::Array:
 					os << "Array[" << arr_.size() << "]";
 					break;
-				case value_type::True:
+				case value_kind::True:
 					os << "true";
 					break;
-				case value_type::False:
+				case value_kind::False:
 					os << "false";
 					break;
-				case value_type::Null:
+				case value_kind::Null:
 					os << "null";
 					break;
 			}
 		}
 
 	};
+
+
+	// -- standard value types
+	using value = basic_value<char>;
+
 
 
 	template <typename CharT, template<typename T> class Allocator>
