@@ -310,9 +310,6 @@ namespace krystal {
 	};
 
 
-	// -- standard value types
-	using value = basic_value<char>;
-
 	template <typename CharT, template<typename T> class Allocator>
 	std::ostream& operator<<(std::ostream& os, const basic_value<CharT, Allocator>& t) {
 		t.debugPrint(os);
