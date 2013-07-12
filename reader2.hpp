@@ -6,7 +6,7 @@
 
 #include <iosfwd>
 #include <sstream>
-#include "value.hpp"
+#include "value2.hpp"
 
 namespace krystal {
 	
@@ -81,6 +81,7 @@ namespace krystal {
 	class reader {
 		std::shared_ptr<reader_delegate> delegate_;
 		bool error_occurred = false;
+		static std::string null_tok, true_tok, false_tok;
 
 	public:
 		reader(std::shared_ptr<reader_delegate> delegate) : delegate_{ delegate } {}
@@ -94,18 +95,16 @@ namespace krystal {
 		
 		template <typename ForwardIterator>
 		void parse_literal(reader_stream<ForwardIterator>& is) {
-			static std::string null_tok {"null"}, true_tok{"true"}, false_tok{"false"};
-			
-			static std::ostringstream token;
+			auto token_data = std::vector<char>(size_t(6), '\0');
+			auto token = token_data.begin(), token_end = token_data.end();
 			auto ch = is.peek();
 			
-			while (ch >= 'a' && ch <= 'z') {
-				token << (char)is.get();
+			while (ch >= 'a' && ch <= 'z' && token != token_end) {
+				*token++ = (char)is.get();
 				ch = is.peek();
 			}
 			
-			auto token_str = token.str();
-			token.str({});
+			auto token_str = std::string{ token_data.begin(), token };
 			
 			if (token_str == true_tok)
 				delegate_->true_value();
@@ -182,7 +181,7 @@ namespace krystal {
 			}
 
 			double val = int_part + frac_part;
-			if (exp_part != 0.0) {
+			if (exp_part != 0) {
 				if (exp_minus) exp_part = -exp_part;
 				val *= std::pow(10.0, exp_part);
 			}
@@ -451,6 +450,8 @@ namespace krystal {
 			return !error_occurred;
 		}
 	};
+
+	std::string reader::null_tok {"null"}, reader::true_tok{"true"}, reader::false_tok{"false"};
 }
 
 #endif

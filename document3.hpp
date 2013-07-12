@@ -6,6 +6,7 @@
 
 #include <iosfwd>
 #include <memory>
+#include <iterator>
 #include "reader2.hpp"
 #include "alloc.hpp"
 
@@ -46,7 +47,7 @@ namespace krystal {
 		decltype(root_.begin()) begin() const { return root_.begin(); }
 		decltype(root_.end()) end() const { return root_.end(); }
 		
-		void debugPrint(std::ostream& os) const { root_.debugPrint(os); }
+		void debugPrint(std::ostream& os) const { return root_.debugPrint(os); }
 	};
 
 	// document non-members
@@ -65,12 +66,13 @@ namespace krystal {
 	template <typename CharT>
 	class document_builder : public reader_delegate {
 		template <typename U>
-		using Allocator = std::allocator<U>;
+		using Allocator = lake_alloc<U>;
 
 		std::unique_ptr<krystal::lake> mem_pool_;
 		basic_value<CharT, Allocator> root_, *cur_node_ = nullptr;
 		std::vector<basic_value<CharT, Allocator>*> context_stack_;
 		std::string next_key_;
+		bool had_error = false;
 		
 		friend class reader;
 		
@@ -92,15 +94,15 @@ namespace krystal {
 		}
 		
 		void null_value() {
-			append({ value_kind::Null });
+			append({ value_kind::Null, mem_pool_.get() });
 		}
 		
 		void false_value() {
-			append({ value_kind::False });
+			append({ value_kind::False, mem_pool_.get() });
 		}
 		
 		void true_value() {
-			append({ value_kind::True });
+			append({ value_kind::True, mem_pool_.get() });
 		}
 		
 		void number_value(double num) {
@@ -109,13 +111,13 @@ namespace krystal {
 		
 		void string_value(const std::string& str) {
 			if (cur_node_->is_array() || next_key_.size())
-				append({ str.data() });
+				append({ str.data(), mem_pool_.get() });
 			else
 				next_key_ = str;
 		}
 		
 		void array_begin() {
-			append({ value_kind::Array });
+			append({ value_kind::Array, mem_pool_.get() });
 		}
 		
 		void array_end() {
@@ -124,7 +126,7 @@ namespace krystal {
 		}
 		
 		void object_begin() {
-			append({ value_kind::Object });
+			append({ value_kind::Object, mem_pool_.get() });
 		}
 		
 		void object_end() {
@@ -133,13 +135,14 @@ namespace krystal {
 		}
 		
 		void error(const std::string& msg, ptrdiff_t offset) {
+			had_error = true;
 			std::cout << "ERROR at position " << offset << ": " << msg << '\n';
 		}
 
 	public:
 		document_builder()
 		: mem_pool_ { new krystal::lake() }
-		, root_{ value_kind::Object }
+		, root_{ value_kind::Object, mem_pool_.get() }
 		, next_key_{ DOC_ROOT_KEY }
 		{
 			context_stack_.reserve(32);
@@ -149,6 +152,9 @@ namespace krystal {
 		
 		document<basic_value<CharT, Allocator>> document() {
 			// the document_builder instance is useless after the call to document()
+			if (had_error) {
+				return { std::move(mem_pool_), { value_kind::Null, mem_pool_.get() } };
+			}
 			return { std::move(mem_pool_), std::move(root_[DOC_ROOT_KEY]) };
 		}
 	};
@@ -167,8 +173,7 @@ namespace krystal {
 		reader r { delegate };
 		reader_stream<ForwardIterator> ris { std::move(first), std::move(last) };
 		
-		if (! r.parse_document(ris))
-			return { { nullptr }, { value_kind::Null } };
+		r.parse_document(ris);
 		
 		return delegate->document();
 	}

@@ -3,7 +3,7 @@
 
 void test_jsonchecker() {
 	group("jsonchecker tests", []{
-
+	
 		test("faulty test data should not parse", []{
 			const int faulty_tests = 33;
 			

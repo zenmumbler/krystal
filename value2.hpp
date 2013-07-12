@@ -8,6 +8,7 @@
 #include <vector>
 #include <unordered_map>
 #include <iosfwd>
+#include <stdexcept>
 
 #include "alloc.hpp"
 
@@ -30,14 +31,18 @@ namespace krystal {
 	
 	template <typename CharT = char, template<typename T> class Allocator = std::allocator>
 	class basic_value {
-		using string_alloc = Allocator<CharT>;
+		template <typename K>
+		using alloc_type = Allocator<K>;
+		using value_type = basic_value<CharT, Allocator>;
+
+		using string_alloc = alloc_type<CharT>;
 		using string_data = std::basic_string<CharT, std::char_traits<CharT>, string_alloc>;
 
-		using array_alloc = std::scoped_allocator_adaptor<Allocator<string_data>>;
-		using array_data = std::vector<basic_value<CharT, Allocator>>;
-
-		using object_alloc = Allocator<std::pair<const std::string, basic_value<CharT, Allocator>>>;
-		using object_data = std::unordered_map<std::string, basic_value<CharT, Allocator>, std::hash<std::string>, std::equal_to<std::string>, object_alloc>;
+		using array_alloc = alloc_type<value_type>;
+		using array_data = std::vector<value_type, array_alloc>;
+		
+		using object_alloc = alloc_type<std::pair<const std::string, value_type>>;
+		using object_data = std::unordered_map<std::string, value_type, std::hash<std::string>, std::equal_to<std::string>, object_alloc>;
 
 		using array_iterator = typename array_data::const_iterator;
 		using object_iterator = typename object_data::const_iterator;
@@ -149,20 +154,18 @@ namespace krystal {
 
 
 		// conversion constructors
-
-		basic_value(value_kind type)
-		: kind_{type}
+		basic_value(value_kind kind, const lake* args)
+		: kind_{kind}
 		{
 			switch(kind_) {
 				case value_kind::String:
-					new (&str_) decltype(str_){};
+					new (&str_) decltype(str_){ string_alloc(args) };
 					break;
 				case value_kind::Array:
-					new (&arr_) decltype(arr_){};
-					arr_.reserve(2);
+					new (&arr_) decltype(arr_){ array_alloc(args) };
 					break;
 				case value_kind::Object:
-					new (&obj_) decltype(obj_){};
+					new (&obj_) decltype(obj_){ object_alloc{args} };
 					break;
 				default:
 					num_ = 0.0;
@@ -170,13 +173,41 @@ namespace krystal {
 			}
 		}
 
+		basic_value(value_kind kind)
+		: kind_{kind}
+		{
+			switch(kind_) {
+				case value_kind::String:
+					new (&str_) decltype(str_){ string_alloc{} };
+					break;
+				case value_kind::Array:
+					new (&arr_) decltype(arr_){ array_alloc{} };
+					break;
+				case value_kind::Object:
+					new (&obj_) decltype(obj_){ object_alloc{} };
+					break;
+				default:
+					num_ = 0.0;
+					break;
+			}
+		}
+
+		basic_value(const std::string& sval, const lake* args)
+		: kind_{value_kind::String}
+		{
+			new (&str_) decltype(str_){ std::begin(sval), std::end(sval), string_alloc{ args } };
+		}
+
 		basic_value(const std::string& sval)
 		: kind_{value_kind::String}
 		{
-			new (&str_) decltype(str_){ sval.data(), sval.data() + sval.size() };
+			new (&str_) decltype(str_){ std::begin(sval), std::end(sval), string_alloc{} };
 		}
 
+		basic_value(const char* ccval, const lake* args) : basic_value(std::string{ccval}, args) {}
+
 		basic_value(const char* ccval) : basic_value(std::string{ccval}) {}
+
 		constexpr explicit basic_value(int ival) : kind_{value_kind::Number}, num_ { (double)ival } {}
 		constexpr explicit basic_value(double dval) : kind_{value_kind::Number}, num_ { dval } {}
 		constexpr explicit basic_value(bool bval) : kind_{bval ? value_kind::True : value_kind::False}, num_ { 0.0 } {}
@@ -233,7 +264,7 @@ namespace krystal {
 		bool contains(const std::string& key) const {
 			if (! is_object())
 				throw std::runtime_error("Trying to check for a key in a non-object value.");
-			
+
 			return obj_.find(key) != obj_.cend();
 		}
 		

@@ -8,7 +8,7 @@
 #include "value2.hpp"
 
 namespace krystal {
-	
+
 	std::string to_string(const value_kind type) {
 		static std::unordered_map<int, std::string> vt2n {
 			{ (int)value_kind::Null,   "null" },
