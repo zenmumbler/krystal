@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include <iosfwd>
+#include <iostream>
 #include <stdexcept>
 
 #include "alloc.hpp"

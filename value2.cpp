@@ -1,10 +1,6 @@
 // value.cpp - part of krystal
 // (c) 2013 by Arthur Langereie
 
-#include <iostream>
-#include <stdexcept>
-#include <utility>
-#include <iterator>
 #include "value2.hpp"
 
 namespace krystal {
