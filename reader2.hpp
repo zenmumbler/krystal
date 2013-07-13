@@ -6,6 +6,7 @@
 
 #include <iosfwd>
 #include <sstream>
+#include <array>
 #include "value2.hpp"
 
 namespace krystal {
@@ -117,6 +118,17 @@ namespace krystal {
 		}
 
 
+		double pow10(int n) {
+			static const auto p10_s = ([]{
+				std::array<double, 617> t;
+				int k = -309;
+				std::generate_n(begin(t), t.size(), [&k]{ return std::pow(10.0, ++k); });
+				return std::move(t);
+			}());
+			
+			return n < -308 ? 0.0 : (n > 308 ? std::pow(10.0, n) : p10_s[n + 308]);
+		}
+
 		template<typename ForwardIterator>
 		void parse_number(reader_stream<ForwardIterator>& is) {
 			decltype(is.peek()) ch;
@@ -159,7 +171,7 @@ namespace krystal {
 					munch();
 				} while (ch >= '0' && ch <= '9');
 
-				frac_part *= std::pow(10.0, -frac_digits);
+				frac_part *= pow10(-frac_digits);
 			}
 			
 			if (ch == 'e' || ch == 'E') {
@@ -183,7 +195,7 @@ namespace krystal {
 			double val = int_part + frac_part;
 			if (exp_part != 0) {
 				if (exp_minus) exp_part = -exp_part;
-				val *= std::pow(10.0, exp_part);
+				val *= pow10(exp_part);
 			}
 			if (minus)
 				val = -val;
@@ -194,8 +206,8 @@ namespace krystal {
 
 		template <typename ForwardIterator>
 		void parse_string(reader_stream<ForwardIterator>& is) {
-			static std::ostringstream ss;
-			ss.str({});
+			static std::vector<char> ss;
+			ss.clear();
 			
 			auto unicode_hex_number = [&]{
 				int digits = 4, number = 0;
@@ -242,23 +254,23 @@ namespace krystal {
 				return codepoint;
 			};
 			
-			auto write_codepoint_as_utf8 = [](std::ostream& os, int codepoint) {
+			auto write_codepoint_as_utf8 = [](std::vector<char>& sb, int codepoint) {
 				if (codepoint <= 0x7F)
-					os.put(codepoint & 0x7F);
+					sb.push_back(codepoint & 0x7F);
 				else if (codepoint <= 0x7FF) {
-					os.put(0xC0 | ((codepoint >> 6) & 0xFF));
-					os.put(0x80 | (codepoint & 0x3F));
+					sb.push_back(0xC0 | ((codepoint >> 6) & 0xFF));
+					sb.push_back(0x80 | (codepoint & 0x3F));
 				}
 				else if (codepoint <= 0xFFFF) {
-					os.put(0xE0 | ((codepoint >> 12) & 0xFF));
-					os.put(0x80 | ((codepoint >> 6) & 0x3F));
-					os.put(0x80 | (codepoint & 0x3F));
+					sb.push_back(0xE0 | ((codepoint >> 12) & 0xFF));
+					sb.push_back(0x80 | ((codepoint >> 6) & 0x3F));
+					sb.push_back(0x80 | (codepoint & 0x3F));
 				}
 				else {
-					os.put(0xF0 | ((codepoint >> 18) & 0xFF));
-					os.put(0x80 | ((codepoint >> 12) & 0x3F));
-					os.put(0x80 | ((codepoint >> 6) & 0x3F));
-					os.put(0x80 | (codepoint & 0x3F));
+					sb.push_back(0xF0 | ((codepoint >> 18) & 0xFF));
+					sb.push_back(0x80 | ((codepoint >> 12) & 0x3F));
+					sb.push_back(0x80 | ((codepoint >> 6) & 0x3F));
+					sb.push_back(0x80 | (codepoint & 0x3F));
 				}
 			};
 			
@@ -275,12 +287,12 @@ namespace krystal {
 				else if (ch == '\\') {
 					ch = is.get();
 					switch (ch) {
-						case '"': case '\\': case '/': ss.put(ch); break;
-						case 'n': ss.put('\n'); break;
-						case 'r': ss.put('\r'); break;
-						case 't': ss.put('\t'); break;
-						case 'b': ss.put('\b'); break;
-						case 'f': ss.put('\f'); break;
+						case '"': case '\\': case '/': ss.push_back(ch); break;
+						case 'n': ss.push_back('\n'); break;
+						case 'r': ss.push_back('\r'); break;
+						case 't': ss.push_back('\t'); break;
+						case 'b': ss.push_back('\b'); break;
+						case 'f': ss.push_back('\f'); break;
 						case 'u':
 							write_codepoint_as_utf8(ss, unicode_literal());
 							if (error_occurred) return;
@@ -293,7 +305,7 @@ namespace krystal {
 				}
 				else {
 					if (ch >= 0x20)
-						ss.put(ch);
+						ss.push_back(ch);
 					else {
 						error("Encountered an unescaped control character #" + std::to_string(ch), is);
 						return;
@@ -306,7 +318,7 @@ namespace krystal {
 				return;
 			}
 			
-			delegate_->string_value(ss.str());
+			delegate_->string_value({ begin(ss), end(ss) });
 		}
 
 
