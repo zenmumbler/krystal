@@ -76,48 +76,49 @@ namespace krystal {
 		
 		friend class reader;
 		
-		void append(basic_value<CharT, Allocator> val) {
-			bool val_is_container = val.is_container();
+		template <typename ...Args>
+		void append(Args&&... args) {
 			basic_value<CharT, Allocator>* mv;
 			
 			if (cur_node_->is_object()) {
-				mv = &cur_node_->insert(next_key_, std::move(val));
+				mv = &cur_node_->emplace(next_key_, std::forward<Args>(args)...);
 				next_key_.clear();
 			}
 			else // array
-				mv = &cur_node_->push_back(std::move(val));
-
-			if (val_is_container) {
+				mv = &cur_node_->emplace_back(std::forward<Args>(args)...);
+			
+			if (mv->is_container()) {
 				context_stack_.push_back(mv);
 				cur_node_ = mv;
 			}
 		}
+
 		
 		void null_value() {
-			append({ value_kind::Null, mem_pool_.get() });
+			append(value_kind::Null, mem_pool_.get());
 		}
 		
 		void false_value() {
-			append({ value_kind::False, mem_pool_.get() });
+			append(value_kind::False, mem_pool_.get());
 		}
 		
 		void true_value() {
-			append({ value_kind::True, mem_pool_.get() });
+			append(value_kind::True, mem_pool_.get());
 		}
 		
 		void number_value(double num) {
-			append(basic_value<CharT, Allocator>{ num });
+			append(num);
 		}
 		
 		void string_value(const std::string& str) {
 			if (cur_node_->is_array() || next_key_.size())
-				append({ str, mem_pool_.get() });
+				append(str, mem_pool_.get());
 			else
 				next_key_ = str;
 		}
 		
 		void array_begin() {
-			append({ value_kind::Array, mem_pool_.get() });
+			append(value_kind::Array, mem_pool_.get());
 		}
 		
 		void array_end() {
@@ -126,7 +127,7 @@ namespace krystal {
 		}
 		
 		void object_begin() {
-			append({ value_kind::Object, mem_pool_.get() });
+			append(value_kind::Object, mem_pool_.get());
 		}
 		
 		void object_end() {

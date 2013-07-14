@@ -78,12 +78,12 @@ void test_value() {
 				av = value{ value_kind::Array },
 				ov = value{ value_kind::Object };
 				
-				av.push_back(value{ 50 });
-				av.push_back(value{ true });
-				av.push_back(value{ "charm" });
+				av.emplace_back(50);
+				av.emplace_back(true);
+				av.emplace_back("charm");
 				
-				ov.insert("important", value{ "don't forget" });
-				ov.insert("monkeys", value{ 12 });
+				ov.emplace("important", "don't forget");
+				ov.emplace("monkeys", 12);
 				
 				dest = std::move(iv);
 				check_equal(dest.number(), 100);
@@ -143,10 +143,10 @@ void test_value() {
 		group("arrays", []{
 			test("normal indexed for loop should iterate over all values linearly", []{
 				auto arr = value{ value_kind::Array };
-				arr.push_back(value{ std::string{10, '*'} });
-				arr.push_back(value{ std::string{20, '*'} });
-				arr.push_back(value{ std::string{30, '*'} });
-				arr.push_back(value{ std::string{40, '*'} });
+				arr.emplace_back(std::string{10, '*'});
+				arr.emplace_back(std::string{20, '*'});
+				arr.emplace_back(std::string{30, '*'});
+				arr.emplace_back(std::string{40, '*'});
 				
 				for (auto ix=0L; ix<arr.size(); ++ix) {
 					const auto& val = arr[ix];
@@ -156,10 +156,10 @@ void test_value() {
 			
 			test("range-based for should iterate over all index-value pairs linearly", []{
 				auto arr = value{ value_kind::Array };
-				arr.push_back(value{ 0 });
-				arr.push_back(value{ 100 });
-				arr.push_back(value{ 200 });
-				arr.push_back(value{ 300 });
+				arr.emplace_back(0);
+				arr.emplace_back(100);
+				arr.emplace_back(200);
+				arr.emplace_back(300);
 				
 				int count = 0;
 				for (auto kv : arr) {
@@ -174,10 +174,10 @@ void test_value() {
 		group("objects", []{
 			test("range-based for should iterate over all key-value pairs in undefined order", []{
 				auto obj = value{ value_kind::Object };
-				obj.insert("key0", value{ false });
-				obj.insert("key1", value{ true });
-				obj.insert("key2", value{ false });
-				obj.insert("key3", value{ true });
+				obj.emplace("key0", false);
+				obj.emplace("key1", true);
+				obj.emplace("key2", false);
+				obj.emplace("key3", true);
 				
 				int count = 0;
 				for (auto kv : obj) {

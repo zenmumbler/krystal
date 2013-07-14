@@ -268,21 +268,23 @@ namespace krystal {
 			return obj_.find(key) != obj_.cend();
 		}
 		
-		basic_value<CharT, Allocator>& insert(std::string key, basic_value<CharT, Allocator>&& val) {
+		template <typename ...Args>
+		basic_value<CharT, Allocator>& emplace(std::string key, Args&&... args) {
 			if (! is_object())
 				throw std::runtime_error("Trying to insert a keyval into a non-object value.");
-			
+
 			if (contains(key))
 				obj_.erase(key); // duplicate key, latest wins as per behaviour in all other JSON parsers
 			
-			return obj_.emplace(key, std::move(val)).first.operator*().second;
+			return obj_.emplace(std::piecewise_construct, std::forward_as_tuple(key), std::forward_as_tuple(args...)).first.operator*().second;
 		}
 		
-		basic_value<CharT, Allocator>& push_back(basic_value<CharT, Allocator>&& val) {
+		template <typename ...Args>
+		basic_value<CharT, Allocator>& emplace_back(Args&&... args) {
 			if (! is_array())
 				throw std::runtime_error("Trying to push_back a value into a non-array value.");
 			
-			arr_.push_back(std::move(val));
+			arr_.emplace_back(std::forward<Args>(args)...);
 			return arr_.back();
 		}
 		
