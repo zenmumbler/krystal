@@ -249,7 +249,7 @@ namespace krystal {
 			if (! is_string())
 				throw std::runtime_error("Trying to call string() on a non-string value.");
 			
-			return { str_.c_str() };
+			return { std::begin(str_), std::end(str_) };
 		}
 		
 		

@@ -60,21 +60,14 @@ namespace krystal {
 	
 		using value_type = T;
 		using size_type = size_t;
-		using difference_type = ptrdiff_t;
 		using pointer = T*;
-		using const_pointer = const T*;
-		using reference = T&;
-		using const_reference = const T&;
 		
 		using propagate_on_container_move_assignment = std::true_type;
 		
 		template <typename U>
 		struct rebind { typedef krystal_alloc<U, Alloc> other; };
 		
-//		krystal_alloc() : allocator_{ new Alloc() } {
-//			std::cout << "new default krystal_alloc\n";
-//		}
-		krystal_alloc(const Alloc* alloc) : allocator_{ alloc } {}
+		krystal_alloc(const Alloc* alloc) noexcept : allocator_{ alloc } {}
 
 		template <class U, class UAlloc>
 		krystal_alloc(const krystal_alloc<U, UAlloc>& rhs) noexcept
@@ -86,15 +79,15 @@ namespace krystal {
 		}
 
 		void deallocate(pointer p, size_type n) {
-			allocator_->deallocate(p, n);
+			allocator_->deallocate(p, sizeof(T) * n);
 		}
 	};
 
 	template <typename T, typename Alloc, typename U>
-	inline bool operator==(const krystal_alloc<T, Alloc>&, const krystal_alloc<U, Alloc>) { return true; }
+	inline bool operator==(const krystal_alloc<T, Alloc>&, const krystal_alloc<U, Alloc>) noexcept { return true; }
 
 	template <typename T, typename Alloc, typename U>
-	inline bool operator!=(const krystal_alloc<T, Alloc>&, const krystal_alloc<U, Alloc>) { return false; }
+	inline bool operator!=(const krystal_alloc<T, Alloc>&, const krystal_alloc<U, Alloc>) noexcept { return false; }
 
 	// -- standard usages
 	template <typename T>

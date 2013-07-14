@@ -111,7 +111,7 @@ namespace krystal {
 		
 		void string_value(const std::string& str) {
 			if (cur_node_->is_array() || next_key_.size())
-				append({ str.data(), mem_pool_.get() });
+				append({ str, mem_pool_.get() });
 			else
 				next_key_ = str;
 		}
@@ -136,7 +136,6 @@ namespace krystal {
 		
 		void error(const std::string& msg, ptrdiff_t offset) {
 			had_error = true;
-			std::cout << "ERROR at position " << offset << ": " << msg << '\n';
 		}
 
 	public:
