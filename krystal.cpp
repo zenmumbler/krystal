@@ -1,7 +1,7 @@
 // krystal.cpp - part of krystal
 // (c) 2013 by Arthur Langereie
 
-#include "value2.hpp"
+#include "value.hpp"
 
 namespace krystal {
 

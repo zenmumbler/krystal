@@ -6,7 +6,6 @@
 
 #include <cstddef>
 #include <memory>
-#include <scoped_allocator>
 
 namespace krystal {
 

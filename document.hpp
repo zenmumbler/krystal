@@ -7,7 +7,7 @@
 #include <iosfwd>
 #include <memory>
 #include <iterator>
-#include "reader2.hpp"
+#include "reader.hpp"
 #include "alloc.hpp"
 
 namespace krystal {

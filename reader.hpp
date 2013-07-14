@@ -7,7 +7,7 @@
 #include <iosfwd>
 #include <sstream>
 #include <array>
-#include "value2.hpp"
+#include "value.hpp"
 
 namespace krystal {
 	
