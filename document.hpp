@@ -149,7 +149,7 @@ namespace krystal {
 			cur_node_ = &root_;
 		}
 		
-		document<basic_value<CharT, Allocator>> document() {
+		krystal::document<basic_value<CharT, Allocator>> document() {
 			// the document_builder instance is useless after the call to document()
 			if (had_error) {
 				return { std::move(mem_pool_), { value_kind::Null, mem_pool_.get() } };
