@@ -8,7 +8,7 @@ Design
 ------
 
 - light-weight, clean codebase
-	- 3 classes and 1 ABC (interface) in a single namespace
+	- 7 classes and 1 ABC (interface) in a single namespace
 	- no macros or other global namespace pollution
 	- depends on, and _only_ on the C++ standard library
 - C++11 only
@@ -54,9 +54,8 @@ For arrays, `first` is a number value with the index, for objects, `first` is th
 Usage
 -----
 
-Currently in flux, I'm transitioning over to .hpp files only due to templated class requirements.
-This will make it easy to include in your project though: make the krystal folder findable for
-your compiler and add `#include "krystal.hpp"` to files in which you wish to use krystal.
+Add the krystal directory to your compiler's include path, add `krystal.cpp` to the list of files to
+compile and `#include "krystal.hpp"` in files where you want to use krystal.
 
 
 Status
