@@ -1,9 +1,12 @@
-// value.cpp - part of krystal
+// krystal.cpp - part of krystal
 // (c) 2013 by Arthur Langereie
 
 #include "value2.hpp"
 
 namespace krystal {
+
+	// It is somehwat irksome that 1 cpp file is needed for only this function
+	// but this is actually used in testing etc. so there it is.
 
 	std::string to_string(const value_kind type) {
 		static std::unordered_map<int, std::string> vt2n {
