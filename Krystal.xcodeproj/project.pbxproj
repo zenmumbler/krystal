@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8E0710411764EE12009467EC /* krystal_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07103F1764EE12009467EC /* krystal_test.cpp */; };
-		8ECCAE431778EE9B00915353 /* value2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8ECCAE421778EE9B00915353 /* value2.cpp */; };
+		8E31AA0A1793130B009EE48F /* krystal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E31AA061793130B009EE48F /* krystal.cpp */; };
 		8EE2B278176B38FC0046FC5B /* checks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EE2B272176B38FC0046FC5B /* checks.cpp */; };
 		8EE2B279176B38FC0046FC5B /* helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EE2B273176B38FC0046FC5B /* helpers.cpp */; };
 		8EE2B27A176B38FC0046FC5B /* Inquisition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EE2B274176B38FC0046FC5B /* Inquisition.cpp */; };
@@ -32,13 +32,13 @@
 /* Begin PBXFileReference section */
 		8E0710331764EDC9009467EC /* krystal_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = krystal_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E07103F1764EE12009467EC /* krystal_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = krystal_test.cpp; path = test/krystal_test.cpp; sourceTree = "<group>"; };
+		8E31AA051793130B009EE48F /* document.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = document.hpp; sourceTree = "<group>"; };
+		8E31AA061793130B009EE48F /* krystal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = krystal.cpp; sourceTree = "<group>"; };
+		8E31AA071793130B009EE48F /* krystal.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = krystal.hpp; sourceTree = "<group>"; };
+		8E31AA081793130B009EE48F /* reader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = reader.hpp; sourceTree = "<group>"; };
+		8E31AA091793130B009EE48F /* value.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = value.hpp; sourceTree = "<group>"; };
 		8E76A3CB17765EB80055E5E8 /* alloc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = alloc.hpp; sourceTree = "<group>"; };
-		8E7A845D1770B88600823314 /* krystal2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = krystal2.hpp; sourceTree = "<group>"; };
 		8EC6592F177052150013513E /* test_performance.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = test_performance.hpp; path = test/test_performance.hpp; sourceTree = "<group>"; };
-		8EC6595B1770AB180013513E /* reader2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = reader2.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		8ECCAE401778AF3000915353 /* value2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = value2.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		8ECCAE411778B1F400915353 /* document3.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = document3.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		8ECCAE421778EE9B00915353 /* value2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = value2.cpp; sourceTree = "<group>"; };
 		8EE2B272176B38FC0046FC5B /* checks.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = checks.cpp; path = ../Inquisition/checks.cpp; sourceTree = "<group>"; };
 		8EE2B273176B38FC0046FC5B /* helpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = helpers.cpp; path = ../Inquisition/helpers.cpp; sourceTree = "<group>"; };
 		8EE2B274176B38FC0046FC5B /* Inquisition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Inquisition.cpp; path = ../Inquisition/Inquisition.cpp; sourceTree = "<group>"; };
@@ -87,12 +87,12 @@
 		8E07103D1764EDE0009467EC /* krystal */ = {
 			isa = PBXGroup;
 			children = (
+				8E31AA061793130B009EE48F /* krystal.cpp */,
+				8E31AA071793130B009EE48F /* krystal.hpp */,
 				8E76A3CB17765EB80055E5E8 /* alloc.hpp */,
-				8ECCAE421778EE9B00915353 /* value2.cpp */,
-				8ECCAE401778AF3000915353 /* value2.hpp */,
-				8EC6595B1770AB180013513E /* reader2.hpp */,
-				8ECCAE411778B1F400915353 /* document3.hpp */,
-				8E7A845D1770B88600823314 /* krystal2.hpp */,
+				8E31AA051793130B009EE48F /* document.hpp */,
+				8E31AA081793130B009EE48F /* reader.hpp */,
+				8E31AA091793130B009EE48F /* value.hpp */,
 			);
 			name = krystal;
 			sourceTree = "<group>";
@@ -185,7 +185,7 @@
 				8E0710411764EE12009467EC /* krystal_test.cpp in Sources */,
 				8EE2B27A176B38FC0046FC5B /* Inquisition.cpp in Sources */,
 				8EE2B27C176B38FC0046FC5B /* TestReport.cpp in Sources */,
-				8ECCAE431778EE9B00915353 /* value2.cpp in Sources */,
+				8E31AA0A1793130B009EE48F /* krystal.cpp in Sources */,
 				8EE2B27D176B38FC0046FC5B /* TestRun.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
