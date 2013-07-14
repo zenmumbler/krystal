@@ -1,45 +1,198 @@
-// util.h - part of krystal
+// document.hpp - part of krystal
 // (c) 2013 by Arthur Langereis (@zenmumbler)
 
-#ifndef __krystal_document__
-#define __krystal_document__
+#ifndef __KRYSTAL_DOCUMENT__
+#define __KRYSTAL_DOCUMENT__
 
-#include "value.hpp"
-#include "reader.hpp"
+#include <iosfwd>
+#include <memory>
+#include <iterator>
+#include "reader2.hpp"
+#include "alloc.hpp"
 
 namespace krystal {
+
+	template <typename ValueClass>
+	class document {
+		std::unique_ptr<krystal::lake> mem_pool_;
+		ValueClass root_;
+
+	public:
+		using value_type = ValueClass;
+
+		document(std::unique_ptr<krystal::lake> mem_pool, ValueClass&& root)
+		: mem_pool_ { std::move(mem_pool) }, root_ { std::move(root) }
+		{}
+
+		// forward const value APIs (container ones only, as a doc can only be array, object or null)
+		inline value_kind type() const { return root_.type(); }
+		inline bool is_a(const value_kind vtype) const { return type() == vtype; }
+		bool is_null() const { return is_a(value_kind::Null); }
+		bool is_false() const { return is_a(value_kind::False); }
+		bool is_true() const { return is_a(value_kind::True); }
+		bool is_bool() const { return is_false() || is_true(); }
+		bool is_number() const { return is_a(value_kind::Number); }
+		bool is_string() const { return is_a(value_kind::String); }
+		bool is_array() const { return is_a(value_kind::Array); }
+		bool is_object() const { return is_a(value_kind::Object); }
+		bool is_container() const { return is_object() || is_array(); }
+
+		size_t size() const { return root_.size(); }
+		
+		bool contains(const std::string& key) const { return root_.contains(key); }
+		
+		const ValueClass& operator[](const std::string& key) const { return root_[key]; }
+		const ValueClass& operator[](const size_t index) const { return root_[index]; }
+		
+		decltype(root_.begin()) begin() const { return root_.begin(); }
+		decltype(root_.end()) end() const { return root_.end(); }
+		
+		void debugPrint(std::ostream& os) const { return root_.debugPrint(os); }
+	};
+
+	// document non-members
+	template <typename ValueClass>
+	auto begin(const document<ValueClass>& d) -> decltype(d.begin()) { return d.begin(); }
+	template <typename ValueClass>
+	auto end(const document<ValueClass>& d) -> decltype(d.end()) { return d.end(); }
+
+	template <typename ValueClass>
+	std::ostream& operator<<(std::ostream& os, const document<ValueClass>& t) { t.debugPrint();	}
+
+
+
+	namespace { const std::string DOC_ROOT_KEY {"___DOCUMENT___"}; }
 	
+	template <typename CharT>
 	class document_builder : public reader_delegate {
-		value root_;
-		std::vector<value*> context_stack_;
+		template <typename U>
+		using Allocator = lake_alloc<U>;
+
+		std::unique_ptr<krystal::lake> mem_pool_;
+		basic_value<CharT, Allocator> root_, *cur_node_ = nullptr;
+		std::vector<basic_value<CharT, Allocator>*> context_stack_;
 		std::string next_key_;
+		bool had_error = false;
 		
 		friend class reader;
 		
-		virtual void null_value() override;
-		virtual void false_value() override;
-		virtual void true_value() override;
-		virtual void number_value(double) override;
-		virtual void string_value(const std::string&) override;
+		void append(basic_value<CharT, Allocator> val) {
+			bool val_is_container = val.is_container();
+			basic_value<CharT, Allocator>* mv;
+			
+			if (cur_node_->is_object()) {
+				mv = &cur_node_->insert(next_key_, std::move(val));
+				next_key_.clear();
+			}
+			else // array
+				mv = &cur_node_->push_back(std::move(val));
+
+			if (val_is_container) {
+				context_stack_.push_back(mv);
+				cur_node_ = mv;
+			}
+		}
 		
-		virtual void array_begin() override;
-		virtual void array_end() override;
+		void null_value() {
+			append({ value_kind::Null, mem_pool_.get() });
+		}
 		
-		virtual void object_begin() override;
-		virtual void object_end() override;
+		void false_value() {
+			append({ value_kind::False, mem_pool_.get() });
+		}
 		
-		virtual void error(const std::string&, std::istream& is) override;
+		void true_value() {
+			append({ value_kind::True, mem_pool_.get() });
+		}
 		
-		void append(value val);
+		void number_value(double num) {
+			append(basic_value<CharT, Allocator>{ num });
+		}
 		
+		void string_value(const std::string& str) {
+			if (cur_node_->is_array() || next_key_.size())
+				append({ str, mem_pool_.get() });
+			else
+				next_key_ = str;
+		}
+		
+		void array_begin() {
+			append({ value_kind::Array, mem_pool_.get() });
+		}
+		
+		void array_end() {
+			context_stack_.pop_back();
+			cur_node_ = context_stack_.back();
+		}
+		
+		void object_begin() {
+			append({ value_kind::Object, mem_pool_.get() });
+		}
+		
+		void object_end() {
+			context_stack_.pop_back();
+			cur_node_ = context_stack_.back();
+		}
+		
+		void error(const std::string& msg, ptrdiff_t offset) {
+			had_error = true;
+		}
+
 	public:
-		document_builder();
-		value document();
+		document_builder()
+		: mem_pool_ { new krystal::lake() }
+		, root_{ value_kind::Object, mem_pool_.get() }
+		, next_key_{ DOC_ROOT_KEY }
+		{
+			context_stack_.reserve(32);
+			context_stack_.push_back(&root_);
+			cur_node_ = &root_;
+		}
+		
+		document<basic_value<CharT, Allocator>> document() {
+			// the document_builder instance is useless after the call to document()
+			if (had_error) {
+				return { std::move(mem_pool_), { value_kind::Null, mem_pool_.get() } };
+			}
+			return { std::move(mem_pool_), std::move(root_[DOC_ROOT_KEY]) };
+		}
 	};
 
+
+
+
+
+	template <typename ForwardIterator>
+	auto parse(ForwardIterator first, ForwardIterator last)
+		-> decltype(document_builder<typename std::iterator_traits<ForwardIterator>::value_type>().document())
+	{
+		using CharT = typename std::iterator_traits<ForwardIterator>::value_type;
+
+		auto delegate = std::make_shared<document_builder<CharT>>();
+		reader r { delegate };
+		reader_stream<ForwardIterator> ris { std::move(first), std::move(last) };
+		
+		r.parse_document(ris);
+		
+		return delegate->document();
+	}
 	
-	value parse(std::istream& json_stream);
-	value parse(std::string json_string);
+	template <typename IStream>
+	auto parse_stream(IStream &is)
+		-> decltype(document_builder<typename IStream::char_type>().document())
+	{
+		is >> std::noskipws;
+		std::istream_iterator<typename IStream::char_type> first{is};
+		return parse(first, {});
+	}
+
+	template <typename CharT>
+	auto parse_string(std::basic_string<CharT> json_string)
+		-> decltype(document_builder<CharT>().document())
+	{
+		return parse(begin(json_string), end(json_string));
+	}
+
 }
 
 #endif
