@@ -90,9 +90,9 @@
 				8E31AA061793130B009EE48F /* krystal.cpp */,
 				8E31AA071793130B009EE48F /* krystal.hpp */,
 				8E76A3CB17765EB80055E5E8 /* alloc.hpp */,
-				8E31AA051793130B009EE48F /* document.hpp */,
-				8E31AA081793130B009EE48F /* reader.hpp */,
 				8E31AA091793130B009EE48F /* value.hpp */,
+				8E31AA081793130B009EE48F /* reader.hpp */,
+				8E31AA051793130B009EE48F /* document.hpp */,
 			);
 			name = krystal;
 			sourceTree = "<group>";

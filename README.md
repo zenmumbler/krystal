@@ -65,4 +65,7 @@ The parser passes all of JSON.org's jsonchecker tests and is fully functional fo
 Value objects are production ready but I have some ideas to expand on their functionality, usage in 
 real-world apps is now needed to progress the library.
 
-Tested on Clang 3.2 and Clang 3.3 compilers with the libc++ standard library.
+Tested on Clang 3.2 and 3.3 compilers with the libc++ standard library.
+Currently fails to compile on GCC 4.8.1. GCC wants all allocator typedefs present and then there are
+some errors that are related to GCC doing weird things with the decltyped return types for the
+parse_x functions.
