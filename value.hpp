@@ -1,8 +1,8 @@
 // value.hpp - part of krystal
 // (c) 2013 by Arthur Langereie
 
-#ifndef __krystal__value__
-#define __krystal__value__
+#ifndef __KRYSTAL_VALUE__
+#define __KRYSTAL_VALUE__
 
 #include <string>
 #include <vector>

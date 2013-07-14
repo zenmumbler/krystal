@@ -1,8 +1,8 @@
 // alloc.hpp - part of krystal
 // (c) 2013 by Arthur Langereie
 
-#ifndef __krystal_alloc__
-#define __krystal_alloc__
+#ifndef __KRYSTAL_ALLOC__
+#define __KRYSTAL_ALLOC__
 
 #include <cstddef>
 #include <memory>
