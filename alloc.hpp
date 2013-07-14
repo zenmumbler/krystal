@@ -14,7 +14,7 @@ namespace krystal {
 		mutable std::vector<std::unique_ptr<uint8_t[]>> blocks_;
 		mutable uint8_t *arena_, *pos_;
 
-		static constexpr const size_t DefaultBlockSize = 48 * 1024;
+		static constexpr size_t DefaultBlockSize = 48 * 1024;
 
 		void add_block(size_t of_size) const {
 			blocks_.emplace_back(new uint8_t[of_size]);

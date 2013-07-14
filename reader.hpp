@@ -4,9 +4,11 @@
 #ifndef __KRYSTAL_READER__
 #define __KRYSTAL_READER__
 
+#include <cmath>
 #include <iosfwd>
 #include <sstream>
 #include <array>
+#include <algorithm>
 #include "value.hpp"
 
 namespace krystal {

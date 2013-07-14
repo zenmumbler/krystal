@@ -57,7 +57,7 @@ namespace krystal {
 	auto end(const document<ValueClass>& d) -> decltype(d.end()) { return d.end(); }
 
 	template <typename ValueClass>
-	std::ostream& operator<<(std::ostream& os, const document<ValueClass>& t) { t.debugPrint();	}
+	std::ostream& operator<<(std::ostream& os, const document<ValueClass>& t) { t.debugPrint(); return os; }
 
 
 
