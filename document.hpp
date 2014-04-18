@@ -62,7 +62,8 @@ namespace krystal {
 
 
 	namespace { const std::string DOC_ROOT_KEY {"___DOCUMENT___"}; }
-	
+
+
 	template <typename CharT>
 	class document_builder : public reader_delegate {
 		template <typename U>
@@ -93,49 +94,49 @@ namespace krystal {
 			}
 		}
 
-		
-		void null_value() {
+
+		void null_value() override {
 			append(value_kind::Null, mem_pool_.get());
 		}
 		
-		void false_value() {
+		void false_value() override {
 			append(value_kind::False, mem_pool_.get());
 		}
 		
-		void true_value() {
+		void true_value() override {
 			append(value_kind::True, mem_pool_.get());
 		}
 		
-		void number_value(double num) {
+		void number_value(double num) override {
 			append(num);
 		}
 		
-		void string_value(const std::string& str) {
+		void string_value(const std::string& str) override {
 			if (cur_node_->is_array() || next_key_.size())
 				append(str, mem_pool_.get());
 			else
 				next_key_ = str;
 		}
 		
-		void array_begin() {
+		void array_begin() override {
 			append(value_kind::Array, mem_pool_.get());
 		}
 		
-		void array_end() {
+		void array_end() override {
 			context_stack_.pop_back();
 			cur_node_ = context_stack_.back();
 		}
 		
-		void object_begin() {
+		void object_begin() override {
 			append(value_kind::Object, mem_pool_.get());
 		}
 		
-		void object_end() {
+		void object_end() override {
 			context_stack_.pop_back();
 			cur_node_ = context_stack_.back();
 		}
 		
-		void error(const std::string& msg, ptrdiff_t offset) {
+		void error(const std::string& msg, ptrdiff_t offset) override {
 			had_error = true;
 		}
 

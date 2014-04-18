@@ -6,7 +6,6 @@
 
 #include <cmath>
 #include <iosfwd>
-#include <sstream>
 #include <array>
 #include <algorithm>
 #include "value.hpp"

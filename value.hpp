@@ -26,8 +26,10 @@ namespace krystal {
 	
 	std::string to_string(const value_kind type);
 
+
 	template <typename CharT, template<typename T> class Allocator>
 	class iterator;
+
 	
 	template <typename CharT = char, template<typename T> class Allocator = std::allocator>
 	class basic_value {
@@ -59,6 +61,8 @@ namespace krystal {
 		};
 
 	public:
+		using char_type = CharT;
+
 		basic_value() : basic_value(value_kind::Null) {}
 		basic_value(const basic_value& rhs) = delete;
 		basic_value<CharT, Allocator>& operator=(const basic_value<CharT, Allocator>& rhs) = delete;

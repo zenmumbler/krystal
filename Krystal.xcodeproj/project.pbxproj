@@ -38,6 +38,7 @@
 		8E31AA081793130B009EE48F /* reader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = reader.hpp; sourceTree = "<group>"; };
 		8E31AA091793130B009EE48F /* value.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = value.hpp; sourceTree = "<group>"; };
 		8E76A3CB17765EB80055E5E8 /* alloc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = alloc.hpp; sourceTree = "<group>"; };
+		8EBEB0E61901995000CB6C26 /* writer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = writer.hpp; sourceTree = "<group>"; };
 		8EC6592F177052150013513E /* test_performance.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = test_performance.hpp; path = test/test_performance.hpp; sourceTree = "<group>"; };
 		8EE2B272176B38FC0046FC5B /* checks.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = checks.cpp; path = ../Inquisition/checks.cpp; sourceTree = "<group>"; };
 		8EE2B273176B38FC0046FC5B /* helpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = helpers.cpp; path = ../Inquisition/helpers.cpp; sourceTree = "<group>"; };
@@ -91,6 +92,7 @@
 				8E31AA071793130B009EE48F /* krystal.hpp */,
 				8E76A3CB17765EB80055E5E8 /* alloc.hpp */,
 				8E31AA091793130B009EE48F /* value.hpp */,
+				8EBEB0E61901995000CB6C26 /* writer.hpp */,
 				8E31AA081793130B009EE48F /* reader.hpp */,
 				8E31AA051793130B009EE48F /* document.hpp */,
 			);
