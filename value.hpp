@@ -63,7 +63,7 @@ namespace krystal {
 		basic_value(const basic_value& rhs) = delete;
 		basic_value<CharT, Allocator>& operator=(const basic_value<CharT, Allocator>& rhs) = delete;
 
-		basic_value(basic_value<CharT, Allocator>&& rhs)
+		basic_value(basic_value<CharT, Allocator>&& rhs) noexcept
 		: kind_{rhs.kind_}
 		{
 			switch(kind_) {
@@ -88,7 +88,7 @@ namespace krystal {
 			rhs.kind_ = value_kind::Null;
 		}
 
-		basic_value<CharT, Allocator>& operator=(basic_value<CharT, Allocator>&& rhs) {
+		basic_value<CharT, Allocator>& operator=(basic_value<CharT, Allocator>&& rhs) noexcept {
 			if (kind_ == rhs.kind_) {
 				// -- no need for con/destructors, straight up move assignment
 				switch(kind_) {

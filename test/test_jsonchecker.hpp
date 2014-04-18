@@ -13,7 +13,7 @@ void test_jsonchecker() {
 				
 				std::ifstream fail_file{ "jsonchecker/fail" + to_string(tix) + ".json" };
 				auto val = krystal::parse_stream(fail_file);
-				check_equal(val.type(), value_kind::Null);
+				checkEqual(val.type(), value_kind::Null);
 			}
 		});
 
@@ -23,7 +23,7 @@ void test_jsonchecker() {
 			for (int tix=1; tix <= valid_tests; ++tix) {
 				std::ifstream pass_file{ "jsonchecker/pass" + to_string(tix) + ".json" };
 				auto val = krystal::parse_stream(pass_file);
-				check_true(val.is_container());
+				checkTrue(val.is_container());
 			}
 		});
 		
@@ -33,7 +33,7 @@ void test_jsonchecker() {
 			using value = decltype(doc)::value_type;
 
 			auto check_type_and_str = [](const value& val, const std::string& sval) {
-				return check_equal(val.type(), value_kind::String) && check_equal(val.string(), sval);
+				return checkEqual(val.type(), value_kind::String) && checkEqual(val.string(), sval);
 			};
 			auto check_type_and_num = [](const value& val, double nval) {
 				// FIXME: move this to Inquisition itself
@@ -42,24 +42,24 @@ void test_jsonchecker() {
 					        std::abs(a-b) < std::min(a, b) / 1.0e15); // for large a, b
 				};
 				
-				return check_equal(val.type(), value_kind::Number) && check_true(equal_double(val.number(), nval));
+				return checkEqual(val.type(), value_kind::Number) && checkTrue(equal_double(val.number(), nval));
 			};
 			auto check_type_and_size = [](const value& val, value_kind type, size_t size) {
-				return check_equal(val.type(), type) && check_equal(val.size(), size);
+				return checkEqual(val.type(), type) && checkEqual(val.size(), size);
 			};
 			auto check_has_key = [](const value&val, const std::string& key) {
-				return check_true(val.contains(key));
+				return checkTrue(val.contains(key));
 			};
 			
-			if (check_true(doc.is_array()) && check_equal(doc.size(), 20)) {
+			if (checkTrue(doc.is_array()) && checkEqual(doc.size(), 20)) {
 				check_type_and_str(doc[0], "JSON Test Pattern pass1");
 				check_type_and_size(doc[1], value_kind::Object, 1);
 				check_type_and_size(doc[2], value_kind::Object, 0);
 				check_type_and_size(doc[3], value_kind::Array, 0);
 				check_type_and_num(doc[4], -42);
-				check_equal(doc[5].type(), value_kind::True);
-				check_equal(doc[6].type(), value_kind::False);
-				check_equal(doc[7].type(), value_kind::Null);
+				checkEqual(doc[5].type(), value_kind::True);
+				checkEqual(doc[6].type(), value_kind::False);
+				checkEqual(doc[7].type(), value_kind::Null);
 				check_type_and_size(doc[8], value_kind::Object, 32);
 				check_type_and_num(doc[9], 0.5);
 				check_type_and_num(doc[10], 98.6);
@@ -117,11 +117,11 @@ void test_jsonchecker() {
 					check_type_and_str(doc[8]["hex"], "\u0123\u4567\u89AB\uCDEF\uabcd\uef4A");
 
 				if (check_has_key(doc[8], "true"))
-					check_equal(doc[8]["true"].type(), value_kind::True);
+					checkEqual(doc[8]["true"].type(), value_kind::True);
 				if (check_has_key(doc[8], "false"))
-					check_equal(doc[8]["false"].type(), value_kind::False);
+					checkEqual(doc[8]["false"].type(), value_kind::False);
 				if (check_has_key(doc[8], "null"))
-					check_equal(doc[8]["null"].type(), value_kind::Null);
+					checkEqual(doc[8]["null"].type(), value_kind::Null);
 				if (check_has_key(doc[8], "array"))
 					check_type_and_size(doc[8]["array"], value_kind::Array, 0);
 				if (check_has_key(doc[8], "object"))
@@ -163,7 +163,7 @@ void test_jsonchecker() {
 			std::ifstream pass_file{ "jsonchecker/pass2.json" };
 			auto doc = krystal::parse_stream(pass_file);
 
-			check_equal(doc[0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0].string(), "Not too deep");
+			checkEqual(doc[0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0].string(), "Not too deep");
 		});
 	});
 }
