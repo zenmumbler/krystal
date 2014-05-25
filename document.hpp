@@ -66,14 +66,13 @@ std::ostream& operator<<(std::ostream& os, const Document<ValueClass>& t) { t.de
 namespace { const std::string DOC_ROOT_KEY {"___DOCUMENT___"}; }
 
 
-template <typename CharT>
 class DocumentBuilder : public ReaderDelegate {
 	template <typename U>
 	using Allocator = LakeAllocator<U>;
 
 	std::unique_ptr<krystal::Lake> memPool_;
-	BasicValue<CharT, Allocator> root_, *curNode_ = nullptr;
-	std::vector<BasicValue<CharT, Allocator>*> contextStack_;
+	BasicValue<Allocator> root_, *curNode_ = nullptr;
+	std::vector<BasicValue<Allocator>*> contextStack_;
 	std::string nextKey_;
 	bool hadError_ = false;
 	
@@ -81,7 +80,7 @@ class DocumentBuilder : public ReaderDelegate {
 	
 	template <typename ...Args>
 	void append(Args&&... args) {
-		BasicValue<CharT, Allocator>* mv;
+		BasicValue<Allocator>* mv;
 		
 		if (curNode_->isObject()) {
 			mv = &curNode_->emplace(nextKey_, std::forward<Args>(args)...);
@@ -153,7 +152,7 @@ public:
 		curNode_ = &root_;
 	}
 
-	krystal::Document<BasicValue<CharT, Allocator>> document() {
+	krystal::Document<BasicValue<Allocator>> document() {
 		// the DocumentBuilder instance is useless after the call to document()
 		if (hadError_) {
 			return { std::move(memPool_), { ValueKind::Null, memPool_.get() } };
@@ -166,11 +165,9 @@ public:
 
 template <typename ForwardIterator>
 auto parse(ForwardIterator first, ForwardIterator last)
-	-> decltype(DocumentBuilder<typename std::iterator_traits<ForwardIterator>::value_type>().document())
+	-> decltype(DocumentBuilder().document())
 {
-	using CharT = typename std::iterator_traits<ForwardIterator>::value_type;
-
-	auto delegate = std::make_shared<DocumentBuilder<CharT>>();
+	auto delegate = std::make_shared<DocumentBuilder>();
 	Reader r { delegate };
 	ReaderStream<ForwardIterator> ris { std::move(first), std::move(last) };
 	
@@ -181,16 +178,15 @@ auto parse(ForwardIterator first, ForwardIterator last)
 
 template <typename IStream>
 auto parseStream(IStream &is)
-	-> decltype(DocumentBuilder<typename IStream::char_type>().document())
+	-> decltype(DocumentBuilder().document())
 {
 	is >> std::noskipws;
 	std::istream_iterator<typename IStream::char_type> first{is};
 	return parse(first, {});
 }
 
-template <typename CharT>
-auto parseString(std::basic_string<CharT> json_string)
-	-> decltype(DocumentBuilder<CharT>().document())
+auto parseString(std::string json_string)
+	-> decltype(DocumentBuilder().document())
 {
 	return parse(begin(json_string), end(json_string));
 }

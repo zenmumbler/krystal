@@ -13,13 +13,6 @@
 namespace krystal {
 
 
-//template <typename CharT, template<typename T> class Allocator>
-//void traverseDepthFirst(const BasicValue<CharT, Allocator>& val, ) {
-//	
-//}
-//
-//
-//
 //template <typename ValueClass, typename OutputIterator>
 //void write(const ValueClass& val, OutputIterator& stream) {
 //	
@@ -27,9 +20,9 @@ namespace krystal {
 //
 //
 //template <typename ValueClass>
-//std::basic_string<typename ValueClass::CharType>
+//std::string
 //stringify(const ValueClass& val) {
-//	std::vector<typename ValueClass::CharType> json;
+//	std::vector<char> json;
 //	// TODO: reserve guesstimate min size of bytes for vector
 //
 //	write(val, std::back_inserter(json));

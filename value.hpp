@@ -26,18 +26,18 @@ enum class ValueKind {
 };
 
 
-template <typename CharT, template<typename T> class Allocator>
+template <template<typename T> class Allocator>
 class Iterator;
 
 
-template <typename CharT = char, template<typename T> class Allocator = std::allocator>
+template <template<typename T> class Allocator = std::allocator>
 class BasicValue {
 	template <typename K>
 	using AllocType = Allocator<K>;
-	using ValueType = BasicValue<CharT, Allocator>;
+	using ValueType = BasicValue<Allocator>;
 
-	using StringAlloc = AllocType<CharT>;
-	using StringData = std::basic_string<CharT, std::char_traits<CharT>, StringAlloc>;
+	using StringAlloc = AllocType<char>;
+	using StringData = std::basic_string<char, std::char_traits<char>, StringAlloc>;
 
 	using ArrayAlloc = AllocType<ValueType>;
 	using ArrayData = std::vector<ValueType, ArrayAlloc>;
@@ -49,7 +49,7 @@ class BasicValue {
 	using ObjectIterator = typename ObjectData::const_iterator;
 	
 
-	friend class Iterator<CharT, Allocator>;
+	friend class Iterator<Allocator>;
 
 	ValueKind kind_;
 	union {
@@ -60,13 +60,11 @@ class BasicValue {
 	};
 
 public:
-	using CharType = CharT;
-
 	BasicValue() : BasicValue(ValueKind::Null) {}
 	BasicValue(const BasicValue& rhs) = delete;
-	BasicValue<CharT, Allocator>& operator=(const BasicValue<CharT, Allocator>& rhs) = delete;
+	BasicValue<Allocator>& operator=(const BasicValue<Allocator>& rhs) = delete;
 
-	BasicValue(BasicValue<CharT, Allocator>&& rhs) noexcept
+	BasicValue(BasicValue<Allocator>&& rhs) noexcept
 	: kind_{rhs.kind_}
 	{
 		switch(kind_) {
@@ -91,7 +89,7 @@ public:
 		rhs.kind_ = ValueKind::Null;
 	}
 
-	BasicValue<CharT, Allocator>& operator=(BasicValue<CharT, Allocator>&& rhs) noexcept {
+	BasicValue<Allocator>& operator=(BasicValue<Allocator>&& rhs) noexcept {
 		if (kind_ == rhs.kind_) {
 			// -- no need for con/destructors, straight up move assignment
 			switch(kind_) {
@@ -272,7 +270,7 @@ public:
 	}
 	
 	template <typename ...Args>
-	BasicValue<CharT, Allocator>& emplace(std::string key, Args&&... args) {
+	BasicValue<Allocator>& emplace(std::string key, Args&&... args) {
 		if (! isObject())
 			throw std::runtime_error("Trying to insert a keyval into a non-object value.");
 
@@ -283,7 +281,7 @@ public:
 	}
 	
 	template <typename ...Args>
-	BasicValue<CharT, Allocator>& emplace_back(Args&&... args) {
+	BasicValue<Allocator>& emplace_back(Args&&... args) {
 		if (! isArray())
 			throw std::runtime_error("Trying to push_back a value into a non-array value.");
 		
@@ -291,30 +289,30 @@ public:
 		return arr_.back();
 	}
 	
-	const BasicValue<CharT, Allocator>& operator[](const std::string& key) const {
+	const BasicValue<Allocator>& operator[](const std::string& key) const {
 		if (! isObject())
 			throw std::runtime_error("Trying to retrieve a sub-value by key from a non-object value.");
 		
 		return obj_.at(key);
 	}
 	
-	BasicValue<CharT, Allocator>& operator[](const std::string& key) {
-		return const_cast<BasicValue<CharT, Allocator>&>(const_cast<const BasicValue<CharT, Allocator>*>(this)->operator[](key));
+	BasicValue<Allocator>& operator[](const std::string& key) {
+		return const_cast<BasicValue<Allocator>&>(const_cast<const BasicValue<Allocator>*>(this)->operator[](key));
 	}
 	
-	const BasicValue<CharT, Allocator>& operator[](const size_t index) const {
+	const BasicValue<Allocator>& operator[](const size_t index) const {
 		if (! isArray())
 			throw std::runtime_error("Trying to retrieve a sub-value by index from a non-array value.");
 		
 		return arr_.at(index);
 	}
 	
-	BasicValue<CharT, Allocator>& operator[](const size_t index) {
-		return const_cast<BasicValue<CharT, Allocator>&>(const_cast<const BasicValue<CharT, Allocator>*>(this)->operator[](index));
+	BasicValue<Allocator>& operator[](const size_t index) {
+		return const_cast<BasicValue<Allocator>&>(const_cast<const BasicValue<Allocator>*>(this)->operator[](index));
 	}
 
-	Iterator<CharT, Allocator> begin() const;
-	Iterator<CharT, Allocator> end() const;
+	Iterator<Allocator> begin() const;
+	Iterator<Allocator> end() const;
 			
 
 	void debugPrint(std::ostream& os) const {
@@ -346,32 +344,28 @@ public:
 };
 
 
-// -- standard value types
-using Value = BasicValue<char>;
 
-
-
-template <typename CharT, template<typename T> class Allocator>
-std::ostream& operator<<(std::ostream& os, const BasicValue<CharT, Allocator>& t) {
+template <template<typename T> class Allocator>
+std::ostream& operator<<(std::ostream& os, const BasicValue<Allocator>& t) {
 	t.debugPrint(os);
 	return os;
 }
 
 
-template <typename CharT, template<typename T> class Allocator>
+template <template<typename T> class Allocator>
 class Iterator {
-	using KeyType = BasicValue<CharT, Allocator>;
-	using MappedType = const BasicValue<CharT, Allocator>&;
+	using KeyType = BasicValue<Allocator>;
+	using MappedType = const BasicValue<Allocator>&;
 	
-	using ArrayIterator = typename BasicValue<CharT, Allocator>::ArrayIterator;
-	using ObjectIterator = typename BasicValue<CharT, Allocator>::ObjectIterator;
+	using ArrayIterator = typename BasicValue<Allocator>::ArrayIterator;
+	using ObjectIterator = typename BasicValue<Allocator>::ObjectIterator;
 	
 	bool isObject;
 	int arrIndex = 0;
 	ArrayIterator arrIt;
 	ObjectIterator objIt;
 	
-	friend class BasicValue<CharT, Allocator>;
+	friend class BasicValue<Allocator>;
 	
 	Iterator(ArrayIterator a_it, int index = 0)
 	: isObject(false), arrIt(a_it), arrIndex(index) {}
@@ -386,8 +380,8 @@ public:
 	
 	reference current() const {
 		if (isObject)
-			return { BasicValue<CharT, Allocator>{objIt->first}, objIt->second };
-		return { BasicValue<CharT, Allocator>{arrIndex}, *arrIt };
+			return { BasicValue<Allocator>{objIt->first}, objIt->second };
+		return { BasicValue<Allocator>{arrIndex}, *arrIt };
 	}
 	
 	reference operator *() const { return current(); }
@@ -419,8 +413,8 @@ public:
 
 
 // member begin() and end()
-template <typename CharT, template<typename T> class Allocator>
-Iterator<CharT, Allocator> BasicValue<CharT, Allocator>::begin() const {
+template <template<typename T> class Allocator>
+Iterator<Allocator> BasicValue<Allocator>::begin() const {
 	if (! isContainer())
 		throw std::runtime_error("Trying to call begin() on a non-container value.");
 	
@@ -429,8 +423,8 @@ Iterator<CharT, Allocator> BasicValue<CharT, Allocator>::begin() const {
 	return { arr_.begin() };
 }
 
-template <typename CharT, template<typename T> class Allocator>
-Iterator<CharT, Allocator> BasicValue<CharT, Allocator>::end() const {
+template <template<typename T> class Allocator>
+Iterator<Allocator> BasicValue<Allocator>::end() const {
 	if (! isContainer())
 		throw std::runtime_error("Trying to call end() on a non-container value.");
 	
@@ -441,11 +435,11 @@ Iterator<CharT, Allocator> BasicValue<CharT, Allocator>::end() const {
 
 
 // -- non-member begin() and end()
-template <typename CharT, template<typename T> class Allocator>
-Iterator<CharT, Allocator> begin(const BasicValue<CharT, Allocator>& val) { return val.begin(); }
+template <template<typename T> class Allocator>
+Iterator<Allocator> begin(const BasicValue<Allocator>& val) { return val.begin(); }
 
-template <typename CharT, template<typename T> class Allocator>
-Iterator<CharT, Allocator> end(const BasicValue<CharT, Allocator>& val) { return val.end(); }
+template <template<typename T> class Allocator>
+Iterator<Allocator> end(const BasicValue<Allocator>& val) { return val.end(); }
 
 
 } // ns krystal
