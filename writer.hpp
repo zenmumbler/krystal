@@ -1,45 +1,44 @@
 // writer - part of krystal
-// (c) 2014 by Arthur Langereis (@zenmumbler)
+// (c) 2013-4 by Arthur Langereis (@zenmumbler)
 
-#ifndef __KRYSTAL_WRITER__
-#define __KRYSTAL_WRITER__
+#ifndef KRYSTAL_WRITER_H
+#define KRYSTAL_WRITER_H
+
+#include "reader.hpp"
 
 #include <vector>
 #include <memory>
 #include <iterator>
-#include "reader.hpp"
-
 
 namespace krystal {
 
 
+//template <typename CharT, template<typename T> class Allocator>
+//void traverseDepthFirst(const BasicValue<CharT, Allocator>& val, ) {
+//	
+//}
+//
+//
+//
+//template <typename ValueClass, typename OutputIterator>
+//void write(const ValueClass& val, OutputIterator& stream) {
+//	
+//}
+//
+//
+//template <typename ValueClass>
+//std::basic_string<typename ValueClass::CharType>
+//stringify(const ValueClass& val) {
+//	std::vector<typename ValueClass::CharType> json;
+//	// TODO: reserve guesstimate min size of bytes for vector
+//
+//	write(val, std::back_inserter(json));
+//
+//	return { json.begin(), json.end() };
+//}
 
-template <typename CharT, template<typename T> class Allocator>
-void traverseDepthFirst(const basic_value<CharT, Allocator>& val, ) {
-	
-}
 
-
-
-template <typename ValueClass, typename OutputIterator>
-void write(const ValueClass& val, OutputIterator& stream) {
-	
-}
-
-
-template <typename ValueClass>
-std::basic_string<typename ValueClass::char_type>
-stringify(const ValueClass& val) {
-	std::vector<typename ValueClass::char_type> json;
-	// TODO: reserve guesstimate min size of bytes for vector
-
-	write(val, std::back_inserter(json));
-
-	return { json.begin(), json.end() };
-}
-
-
-} // namespace krystal
+} // ns krystal
 
 
 #endif

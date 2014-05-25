@@ -1,96 +1,99 @@
 // alloc.hpp - part of krystal
-// (c) 2013 by Arthur Langereie
+// (c) 2013-4 by Arthur Langereis (@zenmumbler)
 
-#ifndef __KRYSTAL_ALLOC__
-#define __KRYSTAL_ALLOC__
+#ifndef KRYSTAL_ALLOC_H
+#define KRYSTAL_ALLOC_H
 
 #include <cstddef>
 #include <memory>
 
 namespace krystal {
 
-	class lake {
-		const size_t block_size_;
-		mutable std::vector<std::unique_ptr<uint8_t[]>> blocks_;
-		mutable uint8_t *arena_, *pos_;
 
-		static constexpr size_t DefaultBlockSize = 48 * 1024;
+class Lake {
+	const size_t blockSize_;
+	mutable std::vector<std::unique_ptr<uint8_t[]>> blocks_;
+	mutable uint8_t *arena_, *pos_;
 
-		void add_block(size_t of_size) const {
-			blocks_.emplace_back(new uint8_t[of_size]);
-			pos_ = arena_ = blocks_.back().get();
-		}
-		
-		inline void add_block() const { add_block(block_size_); }
+	static constexpr size_t DefaultBlockSize = 48 * 1024;
 
-	public:
-		lake(const size_t block_size)
-		: block_size_ {block_size}
-		{
-			add_block();
-		}
-		lake() : lake(DefaultBlockSize) {}
-		
-		void* allocate(size_t n) const {
-			if (pos_ + n - arena_ > block_size_) {
-				if (n > block_size_)
-					add_block(n); // single-use large block
-				else
-					add_block();
-			}
-
-			auto result = pos_;
-			pos_ += n;
-			return result;
-		}
-		
-		void deallocate(void* p, size_t n) const {
-		}
-	};
-
-
-	template <typename T, typename Alloc>
-	class krystal_alloc {
-		const Alloc* allocator_;
-
-	public:
-		template <typename U, typename A>
-		friend class krystal_alloc;
+	void addBlock(size_t sizeInBytes) const {
+		blocks_.emplace_back(new uint8_t[sizeInBytes]);
+		pos_ = arena_ = blocks_.back().get();
+	}
 	
-		using value_type = T;
-		using size_type = size_t;
-		using pointer = T*;
-		
-		using propagate_on_container_move_assignment = std::true_type;
-		
-		template <typename U>
-		struct rebind { typedef krystal_alloc<U, Alloc> other; };
-		
-		krystal_alloc(const Alloc* alloc) noexcept : allocator_{ alloc } {}
+	inline void addBlock() const { addBlock(blockSize_); }
 
-		template <class U, class UAlloc>
-		krystal_alloc(const krystal_alloc<U, UAlloc>& rhs) noexcept
-		: allocator_{rhs.allocator_}
-		{}
-
-		pointer allocate(size_type n) {
-			return static_cast<pointer>(allocator_->allocate(sizeof(T) * n));
+public:
+	Lake(const size_t blockSize)
+	: blockSize_ {blockSize}
+	{
+		addBlock();
+	}
+	Lake() : Lake(DefaultBlockSize) {}
+	
+	void* allocate(size_t n) const {
+		if (pos_ + n - arena_ > blockSize_) {
+			if (n > blockSize_)
+				addBlock(n); // single-use large block
+			else
+				addBlock();
 		}
 
-		void deallocate(pointer p, size_type n) {
-			allocator_->deallocate(p, sizeof(T) * n);
-		}
-	};
+		auto result = pos_;
+		pos_ += n;
+		return result;
+	}
+	
+	void deallocate(void* p, size_t n) const {
+	}
+};
 
-	template <typename T, typename Alloc, typename U>
-	inline bool operator==(const krystal_alloc<T, Alloc>&, const krystal_alloc<U, Alloc>) noexcept { return true; }
 
-	template <typename T, typename Alloc, typename U>
-	inline bool operator!=(const krystal_alloc<T, Alloc>&, const krystal_alloc<U, Alloc>) noexcept { return false; }
+template <typename T, typename Alloc>
+class AllocAdapter {
+	const Alloc* allocator_;
 
-	// -- standard usages
-	template <typename T>
-	using lake_alloc = krystal_alloc<T, lake>;
-}
+public:
+	template <typename U, typename A>
+	friend class AllocAdapter;
+
+	using value_type = T;
+	using size_type = size_t;
+	using pointer = T*;
+	
+	using propagate_on_container_move_assignment = std::true_type;
+	
+	template <typename U>
+	struct rebind { typedef AllocAdapter<U, Alloc> other; };
+	
+	AllocAdapter(const Alloc* alloc) noexcept : allocator_{ alloc } {}
+
+	template <class U, class UAlloc>
+	AllocAdapter(const AllocAdapter<U, UAlloc>& rhs) noexcept
+	: allocator_{rhs.allocator_}
+	{}
+
+	pointer allocate(size_type n) {
+		return static_cast<pointer>(allocator_->allocate(sizeof(T) * n));
+	}
+
+	void deallocate(pointer p, size_type n) {
+		allocator_->deallocate(p, sizeof(T) * n);
+	}
+};
+
+template <typename T, typename Alloc, typename U>
+inline bool operator==(const AllocAdapter<T, Alloc>&, const AllocAdapter<U, Alloc>) noexcept { return true; }
+
+template <typename T, typename Alloc, typename U>
+inline bool operator!=(const AllocAdapter<T, Alloc>&, const AllocAdapter<U, Alloc>) noexcept { return false; }
+
+// -- standard usages
+template <typename T>
+using LakeAllocator = AllocAdapter<T, Lake>;
+
+
+} // ns krystal
 
 #endif

@@ -12,8 +12,8 @@ void test_jsonchecker() {
 					continue;
 				
 				std::ifstream fail_file{ "jsonchecker/fail" + to_string(tix) + ".json" };
-				auto val = krystal::parse_stream(fail_file);
-				checkEqual(val.type(), value_kind::Null);
+				auto val = krystal::parseStream(fail_file);
+				checkEqual(val.type(), ValueKind::Null);
 			}
 		});
 
@@ -22,45 +22,45 @@ void test_jsonchecker() {
 			
 			for (int tix=1; tix <= valid_tests; ++tix) {
 				std::ifstream pass_file{ "jsonchecker/pass" + to_string(tix) + ".json" };
-				auto val = krystal::parse_stream(pass_file);
-				checkTrue(val.is_container());
+				auto val = krystal::parseStream(pass_file);
+				checkTrue(val.isContainer());
 			}
 		});
 		
 		test("pass1.json document parse should yield exact document equivalent", []{
 			std::ifstream pass_file{ "jsonchecker/pass1.json" };
-			auto doc = krystal::parse_stream(pass_file);
-			using value = decltype(doc)::value_type;
+			auto doc = krystal::parseStream(pass_file);
+			using Value = decltype(doc)::ValueType;
 
-			auto check_type_and_str = [](const value& val, const std::string& sval) {
-				return checkEqual(val.type(), value_kind::String) && checkEqual(val.string(), sval);
+			auto check_type_and_str = [](const Value& val, const std::string& sval) {
+				return checkEqual(val.type(), ValueKind::String) && checkEqual(val.string(), sval);
 			};
-			auto check_type_and_num = [](const value& val, double nval) {
+			auto check_type_and_num = [](const Value& val, double nval) {
 				// FIXME: move this to Inquisition itself
 				auto equal_double = [](double a, double b) {
 					return (std::abs(a-b) < 2.0 * std::numeric_limits<double>::epsilon() || // For small a, b
 					        std::abs(a-b) < std::min(a, b) / 1.0e15); // for large a, b
 				};
 				
-				return checkEqual(val.type(), value_kind::Number) && checkTrue(equal_double(val.number(), nval));
+				return checkEqual(val.type(), ValueKind::Number) && checkTrue(equal_double(val.number(), nval));
 			};
-			auto check_type_and_size = [](const value& val, value_kind type, size_t size) {
+			auto check_type_and_size = [](const Value& val, ValueKind type, size_t size) {
 				return checkEqual(val.type(), type) && checkEqual(val.size(), size);
 			};
-			auto check_has_key = [](const value&val, const std::string& key) {
+			auto check_has_key = [](const Value&val, const std::string& key) {
 				return checkTrue(val.contains(key));
 			};
 			
-			if (checkTrue(doc.is_array()) && checkEqual(doc.size(), 20)) {
+			if (checkTrue(doc.isArray()) && checkEqual(doc.size(), 20)) {
 				check_type_and_str(doc[0], "JSON Test Pattern pass1");
-				check_type_and_size(doc[1], value_kind::Object, 1);
-				check_type_and_size(doc[2], value_kind::Object, 0);
-				check_type_and_size(doc[3], value_kind::Array, 0);
+				check_type_and_size(doc[1], ValueKind::Object, 1);
+				check_type_and_size(doc[2], ValueKind::Object, 0);
+				check_type_and_size(doc[3], ValueKind::Array, 0);
 				check_type_and_num(doc[4], -42);
-				checkEqual(doc[5].type(), value_kind::True);
-				checkEqual(doc[6].type(), value_kind::False);
-				checkEqual(doc[7].type(), value_kind::Null);
-				check_type_and_size(doc[8], value_kind::Object, 32);
+				checkEqual(doc[5].type(), ValueKind::True);
+				checkEqual(doc[6].type(), ValueKind::False);
+				checkEqual(doc[7].type(), ValueKind::Null);
+				check_type_and_size(doc[8], ValueKind::Object, 32);
 				check_type_and_num(doc[9], 0.5);
 				check_type_and_num(doc[10], 98.6);
 				check_type_and_num(doc[11], 99.44);
@@ -75,7 +75,7 @@ void test_jsonchecker() {
 				
 				// embedded object doc[1]
 				if (check_has_key(doc[1], "object with 1 member")) {
-					if (check_type_and_size(doc[1]["object with 1 member"], value_kind::Array, 1))
+					if (check_type_and_size(doc[1]["object with 1 member"], ValueKind::Array, 1))
 						check_type_and_str(doc[1]["object with 1 member"][0], "array with 1 element");
 				}
 
@@ -117,15 +117,15 @@ void test_jsonchecker() {
 					check_type_and_str(doc[8]["hex"], "\u0123\u4567\u89AB\uCDEF\uabcd\uef4A");
 
 				if (check_has_key(doc[8], "true"))
-					checkEqual(doc[8]["true"].type(), value_kind::True);
+					checkEqual(doc[8]["true"].type(), ValueKind::True);
 				if (check_has_key(doc[8], "false"))
-					checkEqual(doc[8]["false"].type(), value_kind::False);
+					checkEqual(doc[8]["false"].type(), ValueKind::False);
 				if (check_has_key(doc[8], "null"))
-					checkEqual(doc[8]["null"].type(), value_kind::Null);
+					checkEqual(doc[8]["null"].type(), ValueKind::Null);
 				if (check_has_key(doc[8], "array"))
-					check_type_and_size(doc[8]["array"], value_kind::Array, 0);
+					check_type_and_size(doc[8]["array"], ValueKind::Array, 0);
 				if (check_has_key(doc[8], "object"))
-					check_type_and_size(doc[8]["object"], value_kind::Object, 0);
+					check_type_and_size(doc[8]["object"], ValueKind::Object, 0);
 
 				if (check_has_key(doc[8], "address"))
 					check_type_and_str(doc[8]["address"], "50 St. James Street");
@@ -136,17 +136,17 @@ void test_jsonchecker() {
 				if (check_has_key(doc[8], "# -- --> */"))
 					check_type_and_str(doc[8]["# -- --> */"], " ");
 				
-				auto check_1to7_array = [&](const value& val) {
+				auto check_1to7_array = [&](const Value& val) {
 					for (int ix=0; ix<7; ++ix)
 						check_type_and_num(val[ix], ix+1);
 				};
 
 				if (check_has_key(doc[8], " s p a c e d ")) {
-					if (check_type_and_size(doc[8][" s p a c e d "], value_kind::Array, 7))
+					if (check_type_and_size(doc[8][" s p a c e d "], ValueKind::Array, 7))
 						check_1to7_array(doc[8][" s p a c e d "]);
 				}
 				if (check_has_key(doc[8], "compact")) {
-					if (check_type_and_size(doc[8]["compact"], value_kind::Array, 7))
+					if (check_type_and_size(doc[8]["compact"], ValueKind::Array, 7))
 						check_1to7_array(doc[8]["compact"]);
 				}
 
@@ -161,7 +161,7 @@ void test_jsonchecker() {
 
 		test("pass2.json enormous subscript access should work", []{
 			std::ifstream pass_file{ "jsonchecker/pass2.json" };
-			auto doc = krystal::parse_stream(pass_file);
+			auto doc = krystal::parseStream(pass_file);
 
 			checkEqual(doc[0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0].string(), "Not too deep");
 		});
