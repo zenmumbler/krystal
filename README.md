@@ -4,6 +4,17 @@ krystal
 A C++11 JSON data reader with a simple but powerful API.<br>
 By Arthur Langereis [(@zenmumbler)](http://twitter.com/zenmumbler/)
 
+
+snake_case branch
+-----------------
+
+I have converted krystal from snake_case (like the C++ standard) to
+camelCase as I got tired looking at all the tiny letters and underscores.
+
+This branch is here to mark the last available version of Krystal with
+the old capitalisation. I may remove this later on.
+
+
 Design
 ------
 
