@@ -10,56 +10,59 @@
 #include <iosfwd>
 #include <memory>
 #include <iterator>
+#include <string>
 
 namespace krystal {
 
 
-template <typename ValueClass>
+template <template<typename T> class Allocator>
 class Document {
-	std::unique_ptr<krystal::Lake> memPool_;
-	ValueClass root_;
-
 public:
-	using ValueType = ValueClass;
+	using ValueType = BasicValue<Allocator>;
 
-	Document(std::unique_ptr<krystal::Lake> memPool, ValueClass&& root)
-	: memPool_ { std::move(memPool) }, root_ { std::move(root) }
+	Document(krystal::Lake *memPool, ValueType&& root)
+	: memPool_ { memPool }, root_ { std::move(root) }
 	{}
 
 	// forward const value APIs (container ones only, as a doc can only be array, object or null)
-	inline ValueKind type() const { return root_.type(); }
-	inline bool isA(const ValueKind vtype) const { return type() == vtype; }
-	bool isNull() const { return isA(ValueKind::Null); }
-	bool isFalse() const { return isA(ValueKind::False); }
-	bool isTrue() const { return isA(ValueKind::True); }
-	bool isBool() const { return isFalse() || isTrue(); }
-	bool isNumber() const { return isA(ValueKind::Number); }
-	bool isString() const { return isA(ValueKind::String); }
-	bool isArray() const { return isA(ValueKind::Array); }
-	bool isObject() const { return isA(ValueKind::Object); }
-	bool isContainer() const { return isObject() || isArray(); }
+	constexpr ValueKind type() const { return root_.type(); }
+	constexpr bool isA(const ValueKind vtype) const { return type() == vtype; }
+	constexpr bool isNull() const { return isA(ValueKind::Null); }
+	constexpr bool isFalse() const { return isA(ValueKind::False); }
+	constexpr bool isTrue() const { return isA(ValueKind::True); }
+	constexpr bool isBool() const { return isFalse() || isTrue(); }
+	constexpr bool isNumber() const { return isA(ValueKind::Number); }
+	constexpr bool isString() const { return isA(ValueKind::String); }
+	constexpr bool isArray() const { return isA(ValueKind::Array); }
+	constexpr bool isObject() const { return isA(ValueKind::Object); }
+	constexpr bool isContainer() const { return isObject() || isArray(); }
 
-	size_t size() const { return root_.size(); }
+	constexpr size_t size() const { return root_.size(); }
 	
 	bool contains(const std::string& key) const { return root_.contains(key); }
 	
-	const ValueClass& operator[](const std::string& key) const { return root_[key]; }
-	const ValueClass& operator[](const size_t index) const { return root_[index]; }
+	const ValueType& operator[](const std::string& key) const { return root_[key]; }
+	const ValueType& operator[](const size_t index) const { return root_[index]; }
 	
-	decltype(root_.begin()) begin() const { return root_.begin(); }
-	decltype(root_.end()) end() const { return root_.end(); }
+	Iterator<Allocator> begin() const { return root_.begin(); }
+	Iterator<Allocator> end() const { return root_.end(); }
 	
 	void debugPrint(std::ostream& os) const { return root_.debugPrint(os); }
+
+private:
+	std::unique_ptr<krystal::Lake> memPool_;
+	ValueType root_;
 };
 
-// Document non-members
-template <typename ValueClass>
-auto begin(const Document<ValueClass>& d) -> decltype(d.begin()) { return d.begin(); }
-template <typename ValueClass>
-auto end(const Document<ValueClass>& d) -> decltype(d.end()) { return d.end(); }
 
-template <typename ValueClass>
-std::ostream& operator<<(std::ostream& os, const Document<ValueClass>& t) { t.debugPrint(); return os; }
+// Document non-members
+template <template<typename T> class Allocator>
+auto begin(const Document<Allocator>& d) -> decltype(d.begin()) { return d.begin(); }
+template <template<typename T> class Allocator>
+auto end(const Document<Allocator>& d) -> decltype(d.end()) { return d.end(); }
+
+template <template<typename T> class Allocator>
+std::ostream& operator<<(std::ostream& os, const Document<Allocator>& t) { t.debugPrint(); return os; }
 
 
 
@@ -142,6 +145,8 @@ class DocumentBuilder : public ReaderDelegate {
 	}
 
 public:
+	using DocumentType = Document<Allocator>;
+
 	DocumentBuilder()
 	: memPool_ { new krystal::Lake() }
 	, root_{ ValueKind::Object, memPool_.get() }
@@ -152,42 +157,40 @@ public:
 		curNode_ = &root_;
 	}
 
-	krystal::Document<BasicValue<Allocator>> document() {
+	DocumentType document() {
 		// the DocumentBuilder instance is useless after the call to document()
+		auto pool = memPool_.release();
+
 		if (hadError_) {
-			return { std::move(memPool_), { ValueKind::Null, memPool_.get() } };
+			return { pool, { ValueKind::Null, pool } };
 		}
-		return { std::move(memPool_), std::move(root_[DOC_ROOT_KEY]) };
+		return { pool, std::move(root_[DOC_ROOT_KEY]) };
 	}
 };
 
 
 
 template <typename ForwardIterator>
-auto parse(ForwardIterator first, ForwardIterator last)
-	-> decltype(DocumentBuilder().document())
-{
-	auto delegate = std::make_shared<DocumentBuilder>();
+DocumentBuilder::DocumentType parse(ForwardIterator first, ForwardIterator last) {
+	DocumentBuilder delegate;
 	Reader r { delegate };
 	ReaderStream<ForwardIterator> ris { std::move(first), std::move(last) };
 	
 	r.parseDocument(ris);
 	
-	return delegate->document();
+	return delegate.document();
 }
 
+
 template <typename IStream>
-auto parseStream(IStream &is)
-	-> decltype(DocumentBuilder().document())
-{
+DocumentBuilder::DocumentType parseStream(IStream &is) {
 	is >> std::noskipws;
 	std::istream_iterator<typename IStream::char_type> first{is};
 	return parse(first, {});
 }
 
-auto parseString(std::string json_string)
-	-> decltype(DocumentBuilder().document())
-{
+
+DocumentBuilder::DocumentType parseString(std::string json_string) {
 	return parse(begin(json_string), end(json_string));
 }
 

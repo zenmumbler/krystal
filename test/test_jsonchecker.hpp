@@ -30,12 +30,12 @@ void test_jsonchecker() {
 		test("pass1.json document parse should yield exact document equivalent", []{
 			std::ifstream pass_file{ "jsonchecker/pass1.json" };
 			auto doc = krystal::parseStream(pass_file);
-			using Value = decltype(doc)::ValueType;
+			using BasicValue = decltype(doc)::ValueType;
 
-			auto check_type_and_str = [](const Value& val, const std::string& sval) {
+			auto check_type_and_str = [](const BasicValue& val, const std::string& sval) {
 				return checkEqual(val.type(), ValueKind::String) && checkEqual(val.string(), sval);
 			};
-			auto check_type_and_num = [](const Value& val, double nval) {
+			auto check_type_and_num = [](const BasicValue& val, double nval) {
 				// FIXME: move this to Inquisition itself
 				auto equal_double = [](double a, double b) {
 					return (std::abs(a-b) < 2.0 * std::numeric_limits<double>::epsilon() || // For small a, b
@@ -44,10 +44,10 @@ void test_jsonchecker() {
 				
 				return checkEqual(val.type(), ValueKind::Number) && checkTrue(equal_double(val.number(), nval));
 			};
-			auto check_type_and_size = [](const Value& val, ValueKind type, size_t size) {
+			auto check_type_and_size = [](const BasicValue& val, ValueKind type, size_t size) {
 				return checkEqual(val.type(), type) && checkEqual(val.size(), size);
 			};
-			auto check_has_key = [](const Value&val, const std::string& key) {
+			auto check_has_key = [](const BasicValue&val, const std::string& key) {
 				return checkTrue(val.contains(key));
 			};
 			
@@ -136,7 +136,7 @@ void test_jsonchecker() {
 				if (check_has_key(doc[8], "# -- --> */"))
 					check_type_and_str(doc[8]["# -- --> */"], " ");
 				
-				auto check_1to7_array = [&](const Value& val) {
+				auto check_1to7_array = [&](const BasicValue& val) {
 					for (int ix=0; ix<7; ++ix)
 						check_type_and_num(val[ix], ix+1);
 				};

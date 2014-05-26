@@ -32,17 +32,15 @@ class Iterator;
 
 template <template<typename T> class Allocator = std::allocator>
 class BasicValue {
-	template <typename K>
-	using AllocType = Allocator<K>;
 	using ValueType = BasicValue<Allocator>;
 
-	using StringAlloc = AllocType<char>;
+	using StringAlloc = Allocator<char>;
 	using StringData = std::basic_string<char, std::char_traits<char>, StringAlloc>;
 
-	using ArrayAlloc = AllocType<ValueType>;
+	using ArrayAlloc = Allocator<ValueType>;
 	using ArrayData = std::vector<ValueType, ArrayAlloc>;
 	
-	using ObjectAlloc = AllocType<std::pair<const std::string, ValueType>>;
+	using ObjectAlloc = Allocator<std::pair<const std::string, ValueType>>;
 	using ObjectData = std::unordered_map<std::string, ValueType, std::hash<std::string>, std::equal_to<std::string>, ObjectAlloc>;
 
 	using ArrayIterator = typename ArrayData::const_iterator;
@@ -214,18 +212,18 @@ public:
 	constexpr explicit BasicValue(bool bval) : kind_{bval ? ValueKind::True : ValueKind::False}, num_ { 0.0 } {}
 
 	// type tests
-	ValueKind type() const { return kind_; }
-	bool isA(const ValueKind type) const { return kind_ == type; }
-	bool isNull() const { return isA(ValueKind::Null); }
-	bool isFalse() const { return isA(ValueKind::False); }
-	bool isTrue() const { return isA(ValueKind::True); }
-	bool isBool() const { return isFalse() || isTrue(); }
-	bool isNumber() const { return isA(ValueKind::Number); }
-	bool isString() const { return isA(ValueKind::String); }
-	bool isArray() const { return isA(ValueKind::Array); }
-	bool isObject() const { return isA(ValueKind::Object); }
-	bool isContainer() const { return isObject() || isArray(); }
-	
+	constexpr ValueKind type() const { return kind_; }
+	constexpr bool isA(const ValueKind type) const { return kind_ == type; }
+	constexpr bool isNull() const { return isA(ValueKind::Null); }
+	constexpr bool isFalse() const { return isA(ValueKind::False); }
+	constexpr bool isTrue() const { return isA(ValueKind::True); }
+	constexpr bool isBool() const { return isFalse() || isTrue(); }
+	constexpr bool isNumber() const { return isA(ValueKind::Number); }
+	constexpr bool isString() const { return isA(ValueKind::String); }
+	constexpr bool isArray() const { return isA(ValueKind::Array); }
+	constexpr bool isObject() const { return isA(ValueKind::Object); }
+	constexpr bool isContainer() const { return isObject() || isArray(); }
+
 	bool boolean() const {
 		if (! isBool())
 			throw std::runtime_error("Trying to call boolean() on a non-bool value.");
@@ -324,7 +322,7 @@ public:
 				os << num_;
 				break;
 			case ValueKind::Object:
-				os << "Object[" << obj_.size() << "]";
+				os << "Object{" << obj_.size() << "}";
 				break;
 			case ValueKind::Array:
 				os << "Array[" << arr_.size() << "]";
@@ -344,12 +342,17 @@ public:
 };
 
 
-
 template <template<typename T> class Allocator>
 std::ostream& operator<<(std::ostream& os, const BasicValue<Allocator>& t) {
 	t.debugPrint(os);
 	return os;
 }
+
+
+// --- standard Value using standard allocator
+using Value = BasicValue<std::allocator>;
+
+
 
 
 template <template<typename T> class Allocator>

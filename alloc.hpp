@@ -89,7 +89,8 @@ inline bool operator==(const AllocAdapter<T, Alloc>&, const AllocAdapter<U, Allo
 template <typename T, typename Alloc, typename U>
 inline bool operator!=(const AllocAdapter<T, Alloc>&, const AllocAdapter<U, Alloc>) noexcept { return false; }
 
-// -- standard usages
+
+// -- standard usage
 template <typename T>
 using LakeAllocator = AllocAdapter<T, Lake>;
 

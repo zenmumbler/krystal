@@ -85,12 +85,12 @@ private:
 
 
 class Reader {
-	std::shared_ptr<ReaderDelegate> delegate_;
+	ReaderDelegate& delegate_;
 	bool errorOccurred = false;
 	static std::string nullToken, trueToken, falseToken;
 
 public:
-	Reader(std::shared_ptr<ReaderDelegate> delegate) : delegate_{ delegate } {}
+	Reader(ReaderDelegate& delegate) : delegate_{ delegate } {}
 
 	template <typename ForwardIterator>
 	void skipWhite(ReaderStream<ForwardIterator>& is) {
@@ -113,11 +113,11 @@ public:
 		auto token_str = std::string{ token_data.begin(), token };
 		
 		if (token_str == trueToken)
-			delegate_->trueValue();
+			delegate_.trueValue();
 		else if (token_str == falseToken)
-			delegate_->falseValue();
+			delegate_.falseValue();
 		else if (token_str == nullToken)
-			delegate_->nullValue();
+			delegate_.nullValue();
 		else
 			error("Expected value but found `" + token_str + "`.", is);
 	}
@@ -205,7 +205,7 @@ public:
 		if (minus)
 			val = -val;
 		
-		delegate_->numberValue(val);
+		delegate_.numberValue(val);
 	}
 
 
@@ -328,7 +328,7 @@ public:
 			return;
 		}
 		
-		delegate_->stringValue({ begin(ss), end(ss) });
+		delegate_.stringValue({ begin(ss), end(ss) });
 	}
 
 
@@ -336,7 +336,7 @@ public:
 	void parseArray(ReaderStream<ForwardIterator>& is) {
 		is.get(); // opening [
 		skipWhite(is);
-		delegate_->arrayBegin();
+		delegate_.arrayBegin();
 		
 		auto ch = is.peek();
 		while (ch != ']') {
@@ -363,7 +363,7 @@ public:
 		
 		is.get(); // closing ]
 		skipWhite(is);
-		delegate_->arrayEnd();
+		delegate_.arrayEnd();
 	}
 
 
@@ -371,7 +371,7 @@ public:
 	void parseObject(ReaderStream<ForwardIterator>& is) {
 		is.get(); // opening {
 		skipWhite(is);
-		delegate_->objectBegin();
+		delegate_.objectBegin();
 		
 		auto ch = is.peek();
 		while (!errorOccurred && is.good() && ch != '}') {
@@ -408,7 +408,7 @@ public:
 		
 		is.get(); // closing }
 		skipWhite(is);
-		delegate_->objectEnd();
+		delegate_.objectEnd();
 	}
 
 
@@ -445,7 +445,7 @@ public:
 	template <typename ForwardIterator>
 	void error(const std::string& msg, ReaderStream<ForwardIterator>& is) {
 		errorOccurred = true;
-		delegate_->error(msg, is.tellg());
+		delegate_.error(msg, is.tellg());
 	}
 
 
