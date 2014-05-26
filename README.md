@@ -2,7 +2,7 @@ krystal
 =======
 
 A C++11 JSON data reader with a simple but powerful API.<br>
-By Arthur Langereis [(@zenmumbler)](http://twitter.com/zenmumbler/)
+By Arthur Langereis ([@zenmumbler](http://twitter.com/zenmumbler/))
 
 Design
 ------
@@ -15,13 +15,14 @@ Design
 	- uses new language and library features to keep design simple
 	- move-only semantics for `value` instances to avoid costly copies
 - focus on ease of use
+	- header-only framework
 	- simple API with clear rules
 	- integrated with language constructs (e.g. range for loop)
 	- clear error messages in parser for syntax errors and in exceptions when using values
 	- speed and memory usage limited by your std lib, but second only to rapidjson right now using clang & libc++
 - fully conformant to JSON spec
 	- correctly parses entire jsonchecker test suite
-- UTF-8 only files and strings, http://utf8everywhere.org/
+- UTF-8 only files and strings, [http://utf8everywhere.org/]()
 - number values are doubles, limiting exact int values to +/- 2^53
 - SAX and DOM style access
 
@@ -68,8 +69,16 @@ the `krystal.hpp` umbrella header in your sources.
 Status
 ------
 
+/!\ Does not compile against stdlibc++, reason is that krystal exploits UB by using an incomplete type
+as the value of `vector` and `unordered_map`, the last of which stdlibc++ does not support
+(legitimately) See:
+[http://stackoverflow.com/questions/13089388/how-to-have-an-unordered-map-where-the-value-type-is-the-class-its-in]()
+
+I was not aware of this when I started work on krystal and am currently looking into how to remedy this,
+likely by wrapping the values in a `unique_ptr` as those explicitly allow incomplete types.
+
 The parser passes all of JSON.org's jsonchecker tests and is fully functional for UTF-8 files and data.
 Currently, only parsing is supported, a JSON writer is in progress.
 
-Tested on Clang 3.2, 3.3 and 3.4 compilers with the libc++ standard library.
-Does not compile using GCC 4.8.1, GCC 4.9 should work but I have not verified that yet.
+Does work with Clang 3.2, 3.3 and 3.4 compilers with the libc++ standard library.
+Will not work on current (May 2014) MSVC compilers, even the CTP versions, because it's not fully C++11 conformant yet.
