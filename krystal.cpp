@@ -24,6 +24,7 @@ std::string toString(const ValueKind kind) {
 	return vt2n[static_cast<int>(kind)];
 }
 
+
 // static tokens used by Reader class
 std::string Reader::nullToken {"null"}, Reader::trueToken{"true"}, Reader::falseToken{"false"};
 
