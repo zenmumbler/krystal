@@ -59,15 +59,20 @@ public:
 	template <typename U, typename A>
 	friend class AllocAdapter;
 
+	using difference_type = std::ptrdiff_t;
+	using reference = T&;
+	using const_reference = const T&;
 	using value_type = T;
 	using size_type = size_t;
 	using pointer = T*;
+	using const_pointer = const T*;
 	
 	using propagate_on_container_move_assignment = std::true_type;
 	
 	template <typename U>
 	struct rebind { typedef AllocAdapter<U, Alloc> other; };
 	
+    AllocAdapter(); // not implemented but defined for GCC 4.9 compat
 	AllocAdapter(const Alloc* alloc) noexcept : allocator_{ alloc } {}
 
 	template <class U, class UAlloc>
