@@ -69,7 +69,7 @@ the `krystal.hpp` umbrella header in your sources.
 Status
 ------
 
-/!\ Does not compile against stdlibc++, reason is that krystal exploits UB by using an incomplete type
+/!\ Does not compile against stdlibc++, because krystal exploits UB by using an incomplete type
 as the value of `vector` and `unordered_map`, the last of which stdlibc++ does not support
 (legitimately) See:
 [http://stackoverflow.com/questions/13089388/how-to-have-an-unordered-map-where-the-value-type-is-the-class-its-in]()
@@ -77,8 +77,7 @@ as the value of `vector` and `unordered_map`, the last of which stdlibc++ does n
 I was not aware of this when I started work on krystal and am currently looking into how to remedy this,
 likely by wrapping the values in a `unique_ptr` as those explicitly allow incomplete types.
 
-The parser passes all of JSON.org's jsonchecker tests and is fully functional for UTF-8 files and data.
-Currently, only parsing is supported, a JSON writer is in progress.
-
 Does work with Clang 3.2, 3.3 and 3.4 compilers with the libc++ standard library.
-Will not work on current (May 2014) MSVC compilers, even the CTP versions, because it's not fully C++11 conformant yet.
+Will not work on current (May 2014) MSVC compilers, even the CTP versions, because MSVC is not fully C++11 conformant yet.
+
+JSON output is not yet supported.
