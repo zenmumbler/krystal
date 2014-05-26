@@ -37,7 +37,7 @@ public:
 	constexpr bool isObject() const { return isA(ValueKind::Object); }
 	constexpr bool isContainer() const { return isObject() || isArray(); }
 
-	constexpr size_t size() const { return root_.size(); }
+	size_t size() const { return root_.size(); }
 	
 	bool contains(const std::string& key) const { return root_.contains(key); }
 	
@@ -66,12 +66,11 @@ std::ostream& operator<<(std::ostream& os, const Document<Allocator>& t) { t.deb
 
 
 
-namespace { const std::string DOC_ROOT_KEY {"___DOCUMENT___"}; }
-
-
 class DocumentBuilder : public ReaderDelegate {
 	template <typename U>
 	using Allocator = LakeAllocator<U>;
+
+	const std::string DOC_ROOT_KEY {"___DOCUMENT___"};
 
 	std::unique_ptr<krystal::Lake> memPool_;
 	BasicValue<Allocator> root_, *curNode_ = nullptr;

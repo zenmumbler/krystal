@@ -25,6 +25,9 @@ enum class ValueKind {
 	Object
 };
 
+std::string toString(const ValueKind kind);
+
+
 
 template <template<typename T> class Allocator>
 class Iterator;

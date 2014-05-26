@@ -473,8 +473,6 @@ public:
 	}
 };
 
-std::string Reader::nullToken {"null"}, Reader::trueToken{"true"}, Reader::falseToken{"false"};
-
 
 } // ns krystal
 

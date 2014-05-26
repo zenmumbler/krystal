@@ -2,8 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>7F007E7E-6192-481F-9AD5-FBAD0DC9B9F6</string>
+	<string>2B8FA186-15A7-4108-AEAC-8751CBA67F2C</string>
 	<key>IDESourceControlProjectName</key>
 	<string>Krystal</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
@@ -34,17 +36,17 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>BFEA61A3-F08E-4C4E-881B-741E8BA58181</string>
+			<string>771FA57B-A8B9-4B4A-B431-838C3A23AB90</string>
 			<key>IDESourceControlWCCName</key>
-			<string>Krystal</string>
+			<string>Inquisition</string>
 		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>771FA57B-A8B9-4B4A-B431-838C3A23AB90</string>
+			<string>BFEA61A3-F08E-4C4E-881B-741E8BA58181</string>
 			<key>IDESourceControlWCCName</key>
-			<string>Inquisition</string>
+			<string>Krystal</string>
 		</dict>
 	</array>
 </dict>
