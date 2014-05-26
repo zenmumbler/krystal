@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		8E0710411764EE12009467EC /* krystal_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07103F1764EE12009467EC /* krystal_test.cpp */; };
-		8EB5CA1C19338199001A2515 /* krystal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EB5CA1B19338199001A2515 /* krystal.cpp */; };
 		8EE2B278176B38FC0046FC5B /* checks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EE2B272176B38FC0046FC5B /* checks.cpp */; };
 		8EE2B279176B38FC0046FC5B /* helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EE2B273176B38FC0046FC5B /* helpers.cpp */; };
 		8EE2B27A176B38FC0046FC5B /* Inquisition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EE2B274176B38FC0046FC5B /* Inquisition.cpp */; };
@@ -37,7 +36,6 @@
 		8E31AA081793130B009EE48F /* reader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = reader.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		8E31AA091793130B009EE48F /* value.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = value.hpp; sourceTree = "<group>"; };
 		8E76A3CB17765EB80055E5E8 /* alloc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = alloc.hpp; sourceTree = "<group>"; };
-		8EB5CA1B19338199001A2515 /* krystal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = krystal.cpp; sourceTree = "<group>"; };
 		8EBEB0E61901995000CB6C26 /* writer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = writer.hpp; sourceTree = "<group>"; };
 		8EC6592F177052150013513E /* test_performance.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = test_performance.hpp; path = test/test_performance.hpp; sourceTree = "<group>"; };
 		8EE2B272176B38FC0046FC5B /* checks.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = checks.cpp; path = ../Inquisition/checks.cpp; sourceTree = "<group>"; };
@@ -89,7 +87,6 @@
 			isa = PBXGroup;
 			children = (
 				8E31AA071793130B009EE48F /* krystal.hpp */,
-				8EB5CA1B19338199001A2515 /* krystal.cpp */,
 				8E76A3CB17765EB80055E5E8 /* alloc.hpp */,
 				8E31AA091793130B009EE48F /* value.hpp */,
 				8EBEB0E61901995000CB6C26 /* writer.hpp */,
@@ -181,7 +178,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8EB5CA1C19338199001A2515 /* krystal.cpp in Sources */,
 				8EE2B278176B38FC0046FC5B /* checks.cpp in Sources */,
 				8EE2B27B176B38FC0046FC5B /* Test.cpp in Sources */,
 				8EE2B279176B38FC0046FC5B /* helpers.cpp in Sources */,

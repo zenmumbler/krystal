@@ -87,7 +87,7 @@ private:
 class Reader {
 	ReaderDelegate& delegate_;
 	bool errorOccurred = false;
-	static std::string nullToken, trueToken, falseToken;
+	std::string nullToken {"null"}, trueToken{"true"}, falseToken{"false"};
 
 public:
 	Reader(ReaderDelegate& delegate) : delegate_{ delegate } {}
