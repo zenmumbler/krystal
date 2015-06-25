@@ -344,6 +344,8 @@ public:
 };
 
 
+using Value = BasicValue<>;
+
 
 template <template<typename T> class Allocator>
 std::ostream& operator<<(std::ostream& os, const BasicValue<Allocator>& t) {

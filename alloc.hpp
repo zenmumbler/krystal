@@ -35,13 +35,13 @@ public:
 	void* allocate(size_t n) const {
 		if (pos_ + n - arena_ > blockSize_) {
 			if (n > blockSize_)
-				addBlock(n); // single-use large block
+				addBlock(n + blockSize_); // single-use large block
 			else
 				addBlock();
 		}
 
 		auto result = pos_;
-		pos_ += n;
+		pos_ += (n + 3) & ~3;
 		return result;
 	}
 	
