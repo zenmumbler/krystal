@@ -3,5 +3,4 @@
 
 #include "value.hpp"
 #include "reader.hpp"
-#include "writer.hpp"
 #include "document.hpp"

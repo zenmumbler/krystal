@@ -1,5 +1,5 @@
 // document.hpp - part of krystal
-// (c) 2013-4 by Arthur Langereis (@zenmumbler)
+// (c) 2013-5 by Arthur Langereis (@zenmumbler)
 
 #ifndef KRYSTAL_DOCUMENT_H
 #define KRYSTAL_DOCUMENT_H
@@ -12,6 +12,54 @@
 #include <iterator>
 
 namespace krystal {
+
+
+/*
+
+values is packed value data in a linear buffer
+representation of values:
+Null: not present
+False: not present
+True: not present
+Number: double
+String: char[]
+Array: uint32 length
+  followed by values of array
+Object: uint32 length
+  followed by sets of hashed keys (uint32) and values of object
+
+data:
+array<ValueKind (uint8)>
+array<value> per above
+
+problem: implement:
+
+{
+	"aap": [10, 100, 1000, 5000],
+	"kaas": "neus",
+	"sub": {
+		"plop": true,
+		"sop": "xx"
+	}
+}
+
+types:  [ _, O, A, N,  N,   N,    N,    S,        O,  T, S ]
+values: [ _, 3, 4, 10, 100, 1000, 5000, "neus\0", 1,     "xx\0" ]
+offsets [ _, 0, 4, 8,  16,  24,   32,   36,       44,    45 ]
+map: {
+	"aap":   0,
+	"kaas": 36,
+	"sub":  44
+}
+
+for (auto& v : doc["sub"]) {
+}
+
+ValueProxy
+	Index (uint)
+	size() { values[offsets[index]] }
+
+*/
 
 
 template <typename ValueClass>
