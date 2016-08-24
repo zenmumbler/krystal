@@ -1,5 +1,5 @@
 // krystal_test.cpp - part of krystal
-// (c) 2013 by Arthur Langereis (@zenmumbler)
+// (c) 2013-6 by Arthur Langereis (@zenmumbler)
 
 #include <vector>
 #include <string>
@@ -24,18 +24,20 @@ static std::vector<ValueKind> all_types() {
 }
 
 
-static std::string toString(const ValueKind kind) {
-	static std::unordered_map<int, std::string> vt2n {
-		{ (int)ValueKind::Null,   "null" },
-		{ (int)ValueKind::False,  "false" },
-		{ (int)ValueKind::True,   "true" },
-		{ (int)ValueKind::Number, "number" },
-		{ (int)ValueKind::String, "string" },
-		{ (int)ValueKind::Array,  "array" },
-		{ (int)ValueKind::Object, "object" }
-	};
-	
-	return vt2n[static_cast<int>(kind)];
+namespace krystal {
+	std::string toString(const ValueKind kind) {
+		static std::unordered_map<int, std::string> vt2n {
+			{ (int)ValueKind::Null,   "null" },
+			{ (int)ValueKind::False,  "false" },
+			{ (int)ValueKind::True,   "true" },
+			{ (int)ValueKind::Number, "number" },
+			{ (int)ValueKind::String, "string" },
+			{ (int)ValueKind::Array,  "array" },
+			{ (int)ValueKind::Object, "object" }
+		};
+		
+		return vt2n[static_cast<int>(kind)];
+	}
 }
 
 
