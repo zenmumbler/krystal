@@ -13,7 +13,7 @@
 
 namespace krystal {
 
-	
+
 class ReaderDelegate {
 public:
 	virtual ~ReaderDelegate() = default;
@@ -128,7 +128,7 @@ public:
 			std::array<double, 617> t;
 			int k = -309;
 			std::generate_n(begin(t), t.size(), [&k]{ return std::pow(10.0, ++k); });
-			return std::move(t);
+			return t;
 		}());
 		
 		return n < -308 ? 0.0 : (n > 308 ? std::pow(10.0, n) : p10_s[n + 308]);
