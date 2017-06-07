@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "B8661D53AD5D73A985B95C4BB3A14B359280E8B4",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "B8661D53AD5D73A985B95C4BB3A14B359280E8B4" : 0,
+    "A60CE17BB3A08C553194202D51656689B3539A43" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "CBF30736-70AE-4D17-85FC-FA5DD3B2B6E6",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "B8661D53AD5D73A985B95C4BB3A14B359280E8B4" : "krystal\/",
+    "A60CE17BB3A08C553194202D51656689B3539A43" : "Inquisition\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Krystal",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 203,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Krystal.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:zenmumbler\/Inquisition.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "A60CE17BB3A08C553194202D51656689B3539A43"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:zenmumbler\/krystal.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "B8661D53AD5D73A985B95C4BB3A14B359280E8B4"
+    }
+  ]
+}

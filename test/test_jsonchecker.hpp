@@ -11,7 +11,7 @@ void test_jsonchecker() {
 				if (tix == 18) // test 18 tests for limited nesting, which does not apply to krystal
 					continue;
 				
-				std::ifstream fail_file{ "jsonchecker/fail" + to_string(tix) + ".json" };
+				std::ifstream fail_file{ "jsonchecker/fail" + toString(tix) + ".json" };
 				auto val = krystal::parseStream(fail_file);
 				checkEqual(val.type(), ValueKind::Null);
 			}
@@ -21,7 +21,7 @@ void test_jsonchecker() {
 			const int valid_tests = 3;
 			
 			for (int tix=1; tix <= valid_tests; ++tix) {
-				std::ifstream pass_file{ "jsonchecker/pass" + to_string(tix) + ".json" };
+				std::ifstream pass_file{ "jsonchecker/pass" + toString(tix) + ".json" };
 				auto val = krystal::parseStream(pass_file);
 				checkTrue(val.isContainer());
 			}

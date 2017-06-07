@@ -26,30 +26,31 @@ enum class ValueKind {
 };
 
 
-
 template <template<typename T> class Allocator>
 class Iterator;
 
 
 template <template<typename T> class Allocator = std::allocator>
 class BasicValue {
+	template <typename K>
+	using AllocType = Allocator<K>;
 	using ValueType = BasicValue<Allocator>;
-
-	using StringAlloc = Allocator<char>;
+	
+	using StringAlloc = AllocType<char>;
 	using StringData = std::basic_string<char, std::char_traits<char>, StringAlloc>;
-
-	using ArrayAlloc = Allocator<ValueType>;
+	
+	using ArrayAlloc = AllocType<ValueType>;
 	using ArrayData = std::vector<ValueType, ArrayAlloc>;
 	
-	using ObjectAlloc = Allocator<std::pair<const std::string, ValueType>>;
+	using ObjectAlloc = AllocType<std::pair<const std::string, ValueType>>;
 	using ObjectData = std::unordered_map<std::string, ValueType, std::hash<std::string>, std::equal_to<std::string>, ObjectAlloc>;
-
+	
 	using ArrayIterator = typename ArrayData::const_iterator;
 	using ObjectIterator = typename ObjectData::const_iterator;
 	
-
+	
 	friend class Iterator<Allocator>;
-
+	
 	ValueKind kind_;
 	union {
 		StringData str_;
@@ -57,12 +58,12 @@ class BasicValue {
 		ObjectData obj_;
 		double num_;
 	};
-
+	
 public:
 	BasicValue() : BasicValue(ValueKind::Null) {}
 	BasicValue(const BasicValue& rhs) = delete;
 	BasicValue<Allocator>& operator=(const BasicValue<Allocator>& rhs) = delete;
-
+	
 	BasicValue(BasicValue<Allocator>&& rhs) noexcept
 	: kind_{rhs.kind_}
 	{
@@ -87,7 +88,7 @@ public:
 		rhs.~BasicValue();
 		rhs.kind_ = ValueKind::Null;
 	}
-
+	
 	BasicValue<Allocator>& operator=(BasicValue<Allocator>&& rhs) noexcept {
 		if (kind_ == rhs.kind_) {
 			// -- no need for con/destructors, straight up move assignment
@@ -135,7 +136,7 @@ public:
 		
 		return *this;
 	}
-
+	
 	~BasicValue() {
 		switch(kind_) {
 			case ValueKind::String:
@@ -151,8 +152,8 @@ public:
 				break;
 		}
 	}
-
-
+	
+	
 	// conversion constructors
 	BasicValue(ValueKind kind, const Lake* args)
 	: kind_{kind}
@@ -172,7 +173,7 @@ public:
 				break;
 		}
 	}
-
+	
 	BasicValue(ValueKind kind)
 	: kind_{kind}
 	{
@@ -191,40 +192,40 @@ public:
 				break;
 		}
 	}
-
+	
 	BasicValue(const std::string& sval, const Lake* args)
 	: kind_{ValueKind::String}
 	{
 		new (&str_) decltype(str_){ std::begin(sval), std::end(sval), StringAlloc{ args } };
 	}
-
+	
 	BasicValue(const std::string& sval)
 	: kind_{ValueKind::String}
 	{
 		new (&str_) decltype(str_){ std::begin(sval), std::end(sval), StringAlloc{} };
 	}
-
+	
 	BasicValue(const char* ccval, const Lake* args) : BasicValue(std::string{ccval}, args) {}
-
+	
 	BasicValue(const char* ccval) : BasicValue(std::string{ccval}) {}
-
+	
 	constexpr explicit BasicValue(int ival) : kind_{ValueKind::Number}, num_ { (double)ival } {}
 	constexpr explicit BasicValue(double dval) : kind_{ValueKind::Number}, num_ { dval } {}
 	constexpr explicit BasicValue(bool bval) : kind_{bval ? ValueKind::True : ValueKind::False}, num_ { 0.0 } {}
-
+	
 	// type tests
-	constexpr ValueKind type() const { return kind_; }
-	constexpr bool isA(const ValueKind type) const { return kind_ == type; }
-	constexpr bool isNull() const { return isA(ValueKind::Null); }
-	constexpr bool isFalse() const { return isA(ValueKind::False); }
-	constexpr bool isTrue() const { return isA(ValueKind::True); }
-	constexpr bool isBool() const { return isFalse() || isTrue(); }
-	constexpr bool isNumber() const { return isA(ValueKind::Number); }
-	constexpr bool isString() const { return isA(ValueKind::String); }
-	constexpr bool isArray() const { return isA(ValueKind::Array); }
-	constexpr bool isObject() const { return isA(ValueKind::Object); }
-	constexpr bool isContainer() const { return isObject() || isArray(); }
-
+	ValueKind type() const { return kind_; }
+	bool isA(const ValueKind type) const { return kind_ == type; }
+	bool isNull() const { return isA(ValueKind::Null); }
+	bool isFalse() const { return isA(ValueKind::False); }
+	bool isTrue() const { return isA(ValueKind::True); }
+	bool isBool() const { return isFalse() || isTrue(); }
+	bool isNumber() const { return isA(ValueKind::Number); }
+	bool isString() const { return isA(ValueKind::String); }
+	bool isArray() const { return isA(ValueKind::Array); }
+	bool isObject() const { return isA(ValueKind::Object); }
+	bool isContainer() const { return isObject() || isArray(); }
+	
 	bool boolean() const {
 		if (! isBool())
 			throw std::runtime_error("Trying to call boolean() on a non-bool value.");
@@ -244,7 +245,7 @@ public:
 		auto num = number();
 		return static_cast<Arith>(num);
 	}
-
+	
 	std::string string() const {
 		if (! isString())
 			throw std::runtime_error("Trying to call string() on a non-string value.");
@@ -264,7 +265,7 @@ public:
 	bool contains(const std::string& key) const {
 		if (! isObject())
 			throw std::runtime_error("Trying to check for a key in a non-object value.");
-
+		
 		return obj_.find(key) != obj_.cend();
 	}
 	
@@ -272,7 +273,7 @@ public:
 	BasicValue<Allocator>& emplace(std::string key, Args&&... args) {
 		if (! isObject())
 			throw std::runtime_error("Trying to insert a keyval into a non-object value.");
-
+		
 		if (contains(key))
 			obj_.erase(key); // duplicate key, latest wins as per behaviour in all other JSON parsers
 		
@@ -309,11 +310,11 @@ public:
 	BasicValue<Allocator>& operator[](const size_t index) {
 		return const_cast<BasicValue<Allocator>&>(const_cast<const BasicValue<Allocator>*>(this)->operator[](index));
 	}
-
+	
 	Iterator<Allocator> begin() const;
 	Iterator<Allocator> end() const;
-			
-
+	
+	
 	void debugPrint(std::ostream& os) const {
 		switch(kind_) {
 			case ValueKind::String:
@@ -323,7 +324,7 @@ public:
 				os << num_;
 				break;
 			case ValueKind::Object:
-				os << "Object{" << obj_.size() << "}";
+				os << "Object[" << obj_.size() << "]";
 				break;
 			case ValueKind::Array:
 				os << "Array[" << arr_.size() << "]";
@@ -339,8 +340,11 @@ public:
 				break;
 		}
 	}
-
+	
 };
+
+
+using Value = BasicValue<>;
 
 
 template <template<typename T> class Allocator>
@@ -348,12 +352,6 @@ std::ostream& operator<<(std::ostream& os, const BasicValue<Allocator>& t) {
 	t.debugPrint(os);
 	return os;
 }
-
-
-// --- standard Value using standard allocator
-using Value = BasicValue<std::allocator>;
-
-
 
 
 template <template<typename T> class Allocator>
@@ -380,7 +378,7 @@ public:
 	// standard iterator interop
 	using iterator_category = std::forward_iterator_tag;
 	using reference = std::pair<KeyType, MappedType>;
-
+	
 	
 	reference current() const {
 		if (isObject)
@@ -445,7 +443,7 @@ Iterator<Allocator> begin(const BasicValue<Allocator>& val) { return val.begin()
 template <template<typename T> class Allocator>
 Iterator<Allocator> end(const BasicValue<Allocator>& val) { return val.end(); }
 
-
+	
 } // ns krystal
 
 #endif

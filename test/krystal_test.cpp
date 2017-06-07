@@ -1,5 +1,5 @@
 // krystal_test.cpp - part of krystal
-// (c) 2013 by Arthur Langereis (@zenmumbler)
+// (c) 2013-6 by Arthur Langereis (@zenmumbler)
 
 #include <vector>
 #include <string>
@@ -38,11 +38,6 @@ namespace krystal {
 		};
 		
 		return vt2n[static_cast<int>(kind)];
-	}
-
-	// Inquisition compat shim until I convert it over to camelCase.
-	std::string to_string(const ValueKind kind) {
-		return toString(kind);
 	}
 }
 
